@@ -658,8 +658,14 @@ end
 ;;; Graphics ;;;
 ;;;;;;;;;;;;;;;;
 
+to prepare-highlight
+    find-path-lengths
+end
+
+
 to highlight
   ;; remove any previous highlights
+
   ask turtles [ establish-color 
     ]
   ask links [ set color gray + 2 ]
@@ -674,10 +680,12 @@ to do-highlight
   let node one-of turtles with [count link-neighbors > 0 and distancexy mouse-xcor mouse-ycor = min-d]
   if node != nobody
   [
+    
     ;; highlight the chosen node
     ask node
     [
       set color pink - 1
+      
       let pairs (length remove infinity distance-from-other-turtles)
       let local-val (sum remove infinity distance-from-other-turtles) / pairs
       ;; show node's clustering coefficient
@@ -782,7 +790,7 @@ num_nodes
 num_nodes
 10
 400
-400
+200
 1
 1
 NIL
@@ -902,7 +910,7 @@ strength_of_dilemma
 strength_of_dilemma
 0
 0.5
-0.5
+0
 0.01
 1
 NIL
@@ -974,7 +982,7 @@ Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
 1
-0.05
+0.02
 0.01
 1
 NIL
@@ -989,11 +997,28 @@ Transcription-error
 Transcription-error
 0
 1
-0.11
+0
 0.01
 1
 NIL
 HORIZONTAL
+
+BUTTON
+214
+13
+269
+46
+NIL
+prepare-highlight
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
