@@ -45,6 +45,7 @@ globals
   mini
   conf
   anti
+  worked?
 ]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -57,12 +58,13 @@ end
 
 to setup
 
+  clear-all
   reset-ticks
   ;; (for this model to work with NetLogo's new plotting features,
   ;; __clear-all-and-reset-ticks should be replaced with clear-all at
   ;; the beginning of your setup procedure and reset-ticks at the end
   ;; of the procedure.)
-  __clear-all-and-reset-ticks
+
   set infinity 99999  ;; just an arbitrary choice for a large number
   set-default-shape turtles "circle"
   make-turtles
@@ -100,7 +102,7 @@ to setup
   ]
   ask turtles [establish-color]
   ask turtles [interact]
- 
+reset-ticks
   
   
 end
@@ -123,7 +125,7 @@ to go
   
   tick
     
-  
+
 end
 
 
@@ -158,11 +160,11 @@ end
 
 to update-views
   ask turtles [establish-color]
-    find-path-lengths
+   ; find-path-lengths
 
-  let num-connected-pairs sum [length remove infinity (remove 0 distance-from-other-turtles)] of turtles
-  set average-path-length (sum [sum distance-from-other-turtles] of turtles) / (num-connected-pairs)
-    find-clustering-coefficient
+  ;let num-connected-pairs sum [length remove infinity (remove 0 distance-from-other-turtles)] of turtles
+  ;set average-path-length (sum [sum distance-from-other-turtles] of turtles) / (num-connected-pairs)
+  set worked? do-calculations
  end
 
 
@@ -780,7 +782,7 @@ num_nodes
 num_nodes
 10
 400
-102
+400
 1
 1
 NIL
@@ -987,7 +989,7 @@ Transcription-error
 Transcription-error
 0
 1
-0
+0.11
 0.01
 1
 NIL
