@@ -258,7 +258,7 @@ end
 
 
 to interact  ;; calculates the agent's payoff for Prisioner's Dilema. Each agents plays only with its neighbors
-          
+  set neighborhood link-neighbors       
   let total-cooperators count (turtles-on neighborhood) with [cooperate?]
   set inst-score 0
   ifelse cooperate?
@@ -997,7 +997,7 @@ Transcription-error
 Transcription-error
 0
 1
-0
+0.04
 0.01
 1
 NIL
