@@ -741,11 +741,11 @@ end
 
 
 to change-layout
-  layout-circle (sort turtles) max-pxcor - 1
+  ;layout-circle (sort turtles) max-pxcor - 1
   ;layout-tutte turtles with [changed-neighborhood? = true] links (max-pxcor - 1)
-  layout-tutte turtles links (max-pxcor - 1)
+  ;layout-tutte turtles links (max-pxcor - 1)
   ;layout-spring turtles with [changed-neighborhood? = true] links 10 10 0.1
-  ;layout-spring turtles links 10 10 0.1
+  layout-spring turtles links 1 5 10
   
 end
 
@@ -757,11 +757,11 @@ end
 GRAPHICS-WINDOW
 281
 10
-803
-553
-14
-14
-17.66
+801
+551
+25
+25
+10.0
 1
 10
 1
@@ -771,10 +771,10 @@ GRAPHICS-WINDOW
 0
 0
 1
--14
-14
--14
-14
+-25
+25
+-25
+25
 1
 1
 1
@@ -790,7 +790,7 @@ num_nodes
 num_nodes
 10
 400
-200
+202
 1
 1
 NIL
@@ -910,7 +910,7 @@ strength_of_dilemma
 strength_of_dilemma
 0
 0.5
-0
+0.5
 0.01
 1
 NIL
