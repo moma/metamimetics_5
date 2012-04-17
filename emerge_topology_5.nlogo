@@ -14,6 +14,7 @@ turtles-own
   behavior?
   rewire?
   likelihood-to-rewire
+  age
   
   changed-neighborhood?
 ]
@@ -40,7 +41,10 @@ globals
   rewire-all?
   
   cooperation-rate
-  fraction-best
+  fraction-best-maxi
+  fraction-best-mini
+  fraction-best-conf
+  fraction-best-anti
   maxi
   mini
   conf
@@ -95,6 +99,7 @@ to setup
     set rule? false
     set behavior? false
     set rewire? false
+    set age 0
       set shape "face happy"
       ifelse random-float 1.0 < (inicoop / 100)
         [set cooperate? true]
@@ -122,7 +127,7 @@ to go
   set-outputs
   reset-decisions 
   redo-plots
-  
+  ask turtles [set age age + 1]
   tick
     
 
@@ -171,10 +176,10 @@ to update-views
 to decision-stage
  
    ask turtles [ 
-      ifelse random-float 1 < likelihood-to-rewire
+      ifelse random-float 1 < likelihood-to-rewire 
    [if not am-i-the-best? [set rewire? true]]
    [
-     ifelse not am-i-the-best? and not is-my-rule-the-best? [set rule? true]
+     ifelse not am-i-the-best? and not is-my-rule-the-best? and (age > 10 or not Maturing-period) [set rule? true]
      [if not am-i-the-best? [set behavior? true]]
    ]
    ]
@@ -393,8 +398,15 @@ end
 
 to set-outputs
     set cooperation-rate count turtles with [cooperate?] / count turtles
-    set fraction-best count turtles with [shape = "face happy"]/ count turtles
-
+    if count turtles with [rule = 1] != 0 [
+    
+    set fraction-best-maxi count turtles with [shape = "face happy" and rule = 1]/ count turtles with [rule = 1]]
+    if count turtles with [rule = 1] != 0 [
+    set fraction-best-mini count turtles with [shape = "face happy" and rule = 2]/ count turtles with [rule = 2]]
+    if count turtles with [rule = 1] != 0 [
+    set fraction-best-conf count turtles with [shape = "face happy" and rule = 3]/ count turtles with [rule = 3]]
+    if count turtles with [rule = 1] != 0 [
+    set fraction-best-anti count turtles with [shape = "face happy" and rule = 4]/ count turtles with [rule = 4]]
   set maxi count turtles with [rule = 1] / count turtles
   set mini count turtles with [rule = 2] / count turtles
   set conf count turtles with [rule = 3] / count turtles
@@ -409,8 +421,15 @@ to redo-plots
   set-current-plot-pen "cooperation"
   plot cooperation-rate
   
-  set-current-plot-pen "fraction-best"
-  plot fraction-best 
+
+  set-current-plot-pen "fraction-best-maxi"
+  plot fraction-best-maxi
+  set-current-plot-pen "fraction-best-mini"
+  plot fraction-best-mini
+  set-current-plot-pen "fraction-best-conf"
+  plot fraction-best-conf
+  set-current-plot-pen "fraction-best-anti"
+  plot fraction-best-anti
   set-current-plot "population"
   set-current-plot-pen "maxi"
   
@@ -755,9 +774,9 @@ end
 ; The full copyright notice is in the Information tab.
 @#$#@#$#@
 GRAPHICS-WINDOW
-281
+429
 10
-801
+949
 551
 25
 25
@@ -784,23 +803,23 @@ ticks
 SLIDER
 3
 50
-162
+126
 83
 num_nodes
 num_nodes
 10
 400
-202
+151
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-3
-490
-95
-523
+4
+526
+177
+559
 rewiring_probability
 rewiring_probability
 0
@@ -834,10 +853,10 @@ average-path-length
 11
 
 PLOT
-6
-170
-269
-349
+5
+144
+268
+323
 Network Properties Rewire-All
 NIL
 NIL
@@ -853,10 +872,10 @@ PENS
 "cc" 1.0 0 -10899396 true "" ""
 
 BUTTON
-164
-50
-219
-83
+228
+10
+283
+43
 setup
 setup
 NIL
@@ -870,10 +889,10 @@ NIL
 1
 
 BUTTON
-221
-50
-276
-83
+286
+10
+341
+43
 NIL
 highlight
 T
@@ -887,10 +906,10 @@ NIL
 1
 
 SLIDER
-10
-360
-182
-393
+129
+50
+240
+83
 inicoop
 inicoop
 0
@@ -902,10 +921,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-11
-402
-183
-435
+242
+50
+414
+83
 strength_of_dilemma
 strength_of_dilemma
 0
@@ -917,10 +936,10 @@ NIL
 HORIZONTAL
 
 BUTTON
-204
-367
-267
-400
+345
+10
+408
+43
 NIL
 go
 T
@@ -934,10 +953,10 @@ NIL
 1
 
 PLOT
-852
+952
 19
 1321
-228
+231
 cooperation
 time
 NIL
@@ -950,13 +969,16 @@ true
 "" ""
 PENS
 "cooperation" 1.0 0 -13791810 true "" ""
-"fraction-best" 1.0 0 -955883 true "" ""
+"fraction-best-maxi" 1.0 0 -2674135 true "" ""
+"fraction-best-mini" 1.0 0 -10899396 true "" ""
+"fraction-best-conf" 1.0 0 -13345367 true "" ""
+"fraction-best-anti" 1.0 0 -16777216 true "" ""
 
 PLOT
-851
-258
+951
+236
 1321
-506
+442
 population
 time
 fraction
@@ -974,40 +996,40 @@ PENS
 "anti" 1.0 0 -16777216 true "" ""
 
 SLIDER
-11
-447
-246
-480
+4
+364
+220
+397
 Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
 1
-0.02
-0.01
+0.004
+0.001
 1
 NIL
 HORIZONTAL
 
 SLIDER
-3
-12
-199
-45
+0
+10
+170
+43
 Transcription-error
 Transcription-error
 0
 1
-0.04
+0.05
 0.01
 1
 NIL
 HORIZONTAL
 
 BUTTON
-214
-13
-269
-46
+170
+10
+225
+43
 NIL
 prepare-highlight
 NIL
@@ -1019,6 +1041,17 @@ NIL
 NIL
 NIL
 1
+
+SWITCH
+5
+328
+153
+361
+Maturing-period
+Maturing-period
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
