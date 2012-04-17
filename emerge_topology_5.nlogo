@@ -93,7 +93,7 @@ to setup
   ask turtles [set neighborhood link-neighbors]
   ask turtles [
     set rule (random 4) + 1 
-    set likelihood-to-rewire Initial-likelihood-to-rewire
+    
     set changed-neighborhood? false
     set score 0.0
     set rule? false
@@ -105,8 +105,23 @@ to setup
         [set cooperate? true]
         [set cooperate? false]
   ]
+  ifelse random-init [
+    ask turtles[
+;;      set theta_1 random-float 1.0
+ ;     set theta_2 random-float 1.0
+      
+      set likelihood-to-rewire random-float 0.01
+    ]
+        ]  
+      [ask turtles[
+  ;    set theta_1 Initial-prob-update-behavior
+   ;   set theta_2 Initial-prob-update-rule
+     
+      set likelihood-to-rewire Initial-likelihood-to-rewire]
+      ]
   ask turtles [establish-color]
   ask turtles [interact]
+  
 reset-ticks
   
   
@@ -384,7 +399,9 @@ to copy-strategy [temp-agent]
     ]
   [
     set rule [rule] of temp-agent]
-  
+  set likelihood-to-rewire [likelihood-to-rewire] of temp-agent 
+  set likelihood-to-rewire likelihood-to-rewire + random-normal 0 Transcription-error
+  if likelihood-to-rewire < 0 [set likelihood-to-rewire 0]
       
      
 end
@@ -401,11 +418,11 @@ to set-outputs
     if count turtles with [rule = 1] != 0 [
     
     set fraction-best-maxi count turtles with [shape = "face happy" and rule = 1]/ count turtles with [rule = 1]]
-    if count turtles with [rule = 1] != 0 [
+    if count turtles with [rule = 2] != 0 [
     set fraction-best-mini count turtles with [shape = "face happy" and rule = 2]/ count turtles with [rule = 2]]
-    if count turtles with [rule = 1] != 0 [
+    if count turtles with [rule = 3] != 0 [
     set fraction-best-conf count turtles with [shape = "face happy" and rule = 3]/ count turtles with [rule = 3]]
-    if count turtles with [rule = 1] != 0 [
+    if count turtles with [rule = 4] != 0 [
     set fraction-best-anti count turtles with [shape = "face happy" and rule = 4]/ count turtles with [rule = 4]]
   set maxi count turtles with [rule = 1] / count turtles
   set mini count turtles with [rule = 2] / count turtles
@@ -914,7 +931,7 @@ inicoop
 inicoop
 0
 100
-50
+0
 1
 1
 NIL
@@ -1003,7 +1020,7 @@ SLIDER
 Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
-1
+0.05
 0.004
 0.001
 1
@@ -1049,6 +1066,17 @@ SWITCH
 361
 Maturing-period
 Maturing-period
+0
+1
+-1000
+
+SWITCH
+153
+328
+276
+361
+Random-init
+Random-init
 0
 1
 -1000
