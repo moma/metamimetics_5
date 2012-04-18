@@ -15,6 +15,7 @@ turtles-own
   rewire?
   likelihood-to-rewire
   age
+  weighting-history
   
   changed-neighborhood?
 ]
@@ -109,14 +110,14 @@ to setup
     ask turtles[
 ;;      set theta_1 random-float 1.0
  ;     set theta_2 random-float 1.0
-      
+      set weighting-history random-float 1
       set likelihood-to-rewire random-float 0.01
     ]
         ]  
       [ask turtles[
   ;    set theta_1 Initial-prob-update-behavior
    ;   set theta_2 Initial-prob-update-rule
-     
+      set weighting-history initial-weighting-history
       set likelihood-to-rewire Initial-likelihood-to-rewire]
       ]
   ask turtles [establish-color]
@@ -192,9 +193,9 @@ to decision-stage
  
    ask turtles [ 
       ifelse random-float 1 < likelihood-to-rewire 
-   [if not am-i-the-best? [set rewire? true]]
+   [if not am-i-the-best? and (age > 50 or not Maturing-period) [set rewire? true]]
    [
-     ifelse not am-i-the-best? and not is-my-rule-the-best? and (age > 10 or not Maturing-period) [set rule? true]
+     ifelse not am-i-the-best? and not is-my-rule-the-best? and (age > 50 or not Maturing-period) [set rule? true]
      [if not am-i-the-best? [set behavior? true]]
    ]
    ]
@@ -287,16 +288,16 @@ to interact  ;; calculates the agent's payoff for Prisioner's Dilema. Each agent
     [set inst-score total-cooperators * ( 1 - strength_of_dilemma)]                   ;; cooperator gets score of # of neighbors who cooperated
     [set inst-score total-cooperators + (count (turtles-on neighborhood) - total-cooperators) * strength_of_dilemma ]  ;; non-cooperator get score of a multiple of the neighbors who cooperated
   set last-score score
-  ;set score inst-score * ( 1 - weighting-history) + last-score * weighting-history   
-  set score inst-score  
+  set score inst-score * ( 1 - weighting-history) + last-score * weighting-history   
+  ;set score inst-score  
 end
 
 to-report am-i-the-best? ;; reports true if the agents is the best in its neighborhood (according with its rule) and false otherwise
   let test false
   ;; In the model, an isolated agent can not consider himself as the best
   if any? turtles-on neighborhood [
-  if (rule = 1) and (score >= [score] of max-one-of turtles-on neighborhood [score] * 0.99) [set test true]
-  if (rule = 2) and (score <= [score] of min-one-of turtles-on neighborhood [score] * 1.01) [set test true]
+  if (rule = 1) and (score >= [0.90 * score] of max-one-of turtles-on neighborhood [score] * 0.99) [set test true]
+  if (rule = 2) and (score <= [1.10 * score] of min-one-of turtles-on neighborhood [score] * 1.01) [set test true]
   if (rule = 3) and (member? rule majority-rules) [set test true]
   if (rule = 4) and (member? rule minority-rules) and not all? (turtles-on neighborhood) [rule = 4] [set test true]  
   ]
@@ -931,7 +932,7 @@ inicoop
 inicoop
 0
 100
-0
+50
 1
 1
 NIL
@@ -1021,7 +1022,7 @@ Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
 0.05
-0.004
+0.001
 0.001
 1
 NIL
@@ -1036,7 +1037,7 @@ Transcription-error
 Transcription-error
 0
 1
-0.05
+0.13
 0.01
 1
 NIL
@@ -1077,9 +1078,24 @@ SWITCH
 361
 Random-init
 Random-init
-0
+1
 1
 -1000
+
+SLIDER
+4
+399
+198
+432
+initial-weighting-history
+initial-weighting-history
+0
+1
+0
+0.01
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
