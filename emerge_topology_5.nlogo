@@ -197,9 +197,9 @@ to decision-stage
  
    ask turtles [ 
       ifelse random-float 1 < likelihood-to-rewire 
-   [if not am-i-the-best? and (age > 12 or not Maturing-period) and (ticks > 10) [set rewire? true]]
+   [if not am-i-the-best? and ((age > 12 and ticks > 10) or not Maturing-period ) [set rewire? true]]
    [
-     ifelse not am-i-the-best? and not is-my-rule-the-best? and (age > 12 or not Maturing-period) and (ticks > 10) [set rule? true]
+     ifelse not am-i-the-best? and not is-my-rule-the-best? and ((age > 12 and ticks > 10) or not Maturing-period ) [set rule? true]
      [if not am-i-the-best? [set behavior? true]]
    ]
    ]
@@ -300,8 +300,8 @@ to-report am-i-the-best? ;; reports true if the agents is the best in its neighb
   let test false
   ;; In the model, an isolated agent can not consider himself as the best
   if any? turtles-on neighborhood [
-  if (rule = 1) and (score >= [0.90 * score] of max-one-of turtles-on neighborhood [score] * 0.99) [set test true]
-  if (rule = 2) and (score <= [1.10 * score] of min-one-of turtles-on neighborhood [score] * 1.01) [set test true]
+  if (rule = 1) and (score >= [score] of max-one-of turtles-on neighborhood [score] * 0.99) [set test true]
+  if (rule = 2) and (score <= [score] of min-one-of turtles-on neighborhood [score] * 1.01) [set test true]
   if (rule = 3) and (member? rule majority-rules) [set test true]
   if (rule = 4) and (member? rule minority-rules) and not all? (turtles-on neighborhood) [rule = 4] [set test true]  
   ]
@@ -896,7 +896,7 @@ num_nodes
 num_nodes
 10
 400
-400
+158
 1
 1
 NIL
@@ -911,7 +911,7 @@ rewiring_probability
 rewiring_probability
 0
 1
-0
+0.08
 0.01
 1
 NIL
@@ -1016,7 +1016,7 @@ strength_of_dilemma
 strength_of_dilemma
 0
 0.5
-0.1
+0
 0.01
 1
 NIL
@@ -1091,7 +1091,7 @@ Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
 0.05
-0.001
+0
 0.001
 1
 NIL
@@ -1106,7 +1106,7 @@ Transcription-error
 Transcription-error
 0
 1
-0.01
+0
 0.01
 1
 NIL
@@ -1136,7 +1136,7 @@ SWITCH
 361
 Maturing-period
 Maturing-period
-0
+1
 1
 -1000
 
@@ -1160,7 +1160,7 @@ initial-weighting-history
 initial-weighting-history
 0
 1
-0.5
+0
 0.01
 1
 NIL
@@ -1183,7 +1183,7 @@ SWITCH
 361
 replacement?
 replacement?
-0
+1
 1
 -1000
 
