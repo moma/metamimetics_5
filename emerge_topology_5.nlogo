@@ -112,7 +112,7 @@ to setup
 ;;      set theta_1 random-float 1.0
  ;     set theta_2 random-float 1.0
       set weighting-history random-float 1
-      set likelihood-to-rewire random-float 0.01
+      set likelihood-to-rewire random-float 0.05
     ]
         ]  
       [ask turtles[
@@ -166,16 +166,20 @@ end
 
 to establish-color  ;; agent procedure
   if rule = 1 
-    [set color red
+    [set color 13 + score / 2
+      if color > 19.9 [set color 19.9]
       ]
   if rule = 2
-    [set color green
+    [set color 53 + score / 2
+       if color > 59.9 [set color 59.9]
       ]
   if rule = 3
-    [set color blue
+    [set color 93 + score / 2
+       if color > 99.9 [set color 99.9]
       ]
   if rule = 4  
-    [set color white
+    [set color 3 + score / 2
+       if color > 9.9 [set color 9.9]
       ]
   ifelse cooperate?
     [set size 1.2]
@@ -467,7 +471,11 @@ end
 
 
 to rewiring-stage
-   ask turtles [if rewire? and not am-i-the-best? [rewire-agent]] 
+   ask turtles [if rewire? and not am-i-the-best? [
+       ifelse pref-rewiring?[
+         rewire-pref][
+         rewire-agent]] 
+   ]
 end
 
 to rewire-agent
@@ -484,6 +492,43 @@ to rewire-agent
   ]
 
 end
+
+to rewire-pref
+
+  let i 2
+  let list-dists []
+  let num-eff count other turtles - count link-neighbors
+
+  set list-dists lput (count other turtles network:in-link-radius 2 links - count link-neighbors) list-dists
+  set i i + 1
+  while [count other turtles network:in-link-radius i links != reduce + list-dists][
+    set list-dists lput (count other turtles network:in-link-radius i links - reduce + list-dists) list-dists
+    set i i + 1 
+  ]
+  set list-dists map [? / (((position ? list-dists + 2) ^ 2) * num-eff)] list-dists 
+  let sum-probs reduce + list-dists
+  ifelse sum-probs = 0 [][
+  
+
+  set list-dists map [? / sum-probs] list-dists
+  let temp-init (random length list-dists)
+  while [random-float 1 > item temp-init list-dists][set temp-init (random length list-dists) ]
+  let temp-agent one-of other turtles network:in-link-radius (temp-init + 2) links
+  while [network:link-distance temp-agent links != (temp-init + 2)][set temp-agent one-of other turtles network:in-link-radius (temp-init + 2) links]
+  
+  
+  let potential-neighbors link-neighbors with [not member? self best-elements]
+  let potential-edges my-links with [member? other-end potential-neighbors]
+  if any? potential-edges [
+    ask one-of potential-edges [
+            let node1 end1
+            let node2 temp-agent
+            ask node1 [create-link-with node2]
+            ask node1 [set changed-neighborhood? true]
+            die]
+  ]]
+end
+
 
 
 to reset-decisions
@@ -572,7 +617,7 @@ to-report do-calculations
 
   ;; set up a variable so we can report if the network is disconnected
   let connected? network:mean-link-path-length turtles links
-  set average-path-length network:mean-link-path-length turtles links
+  set average-path-length network:mean-link-path-length turtles with [count link-neighbors > 0] links
 
   ;; find the path lengths in the network
   ;find-path-lengths
@@ -586,7 +631,7 @@ to-report do-calculations
   ;ifelse ( num-connected-pairs != (count turtles * (count turtles - 1) ))
   ifelse ( connected? = false)
   [
-      set average-path-length infinity
+      ;set average-path-length infinity
       ;; report that the network is not connected
       ;set connected? false
   ]
@@ -863,11 +908,11 @@ end
 GRAPHICS-WINDOW
 429
 10
-949
-551
-25
-25
-10.0
+927
+529
+30
+30
+8.0
 1
 10
 1
@@ -877,10 +922,10 @@ GRAPHICS-WINDOW
 0
 0
 1
--25
-25
--25
-25
+-30
+30
+-30
+30
 1
 1
 1
@@ -896,7 +941,7 @@ num_nodes
 num_nodes
 10
 400
-158
+400
 1
 1
 NIL
@@ -911,7 +956,7 @@ rewiring_probability
 rewiring_probability
 0
 1
-0.08
+0
 0.01
 1
 NIL
@@ -1016,7 +1061,7 @@ strength_of_dilemma
 strength_of_dilemma
 0
 0.5
-0
+0.5
 0.01
 1
 NIL
@@ -1090,8 +1135,8 @@ SLIDER
 Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
-0.05
-0
+1
+0.085
 0.001
 1
 NIL
@@ -1106,7 +1151,7 @@ Transcription-error
 Transcription-error
 0
 1
-0
+0.05
 0.01
 1
 NIL
@@ -1160,7 +1205,7 @@ initial-weighting-history
 initial-weighting-history
 0
 1
-0
+0.5
 0.01
 1
 NIL
@@ -1184,6 +1229,17 @@ SWITCH
 replacement?
 replacement?
 1
+1
+-1000
+
+SWITCH
+226
+422
+358
+455
+pref-rewiring?
+pref-rewiring?
+0
 1
 -1000
 
