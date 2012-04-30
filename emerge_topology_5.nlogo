@@ -84,14 +84,14 @@ to setup
     ;;calculate average path length and clustering coefficient for the lattice
     set success? do-calculations
   ]
-
+  set average-path-length network:mean-link-path-length turtles links
   ;; setting the values for the initial lattice
   set clustering-coefficient-of-lattice clustering-coefficient
   set average-path-length-of-lattice average-path-length
   set number-rewired 0
   set highlight-string ""
   rewire-all
-  
+  set average-path-length network:mean-link-path-length turtles links
   ask turtles [set neighborhood link-neighbors]
   ask turtles [
     set rule (random 4) + 1 
@@ -296,7 +296,11 @@ to interact  ;; calculates the agent's payoff for Prisioner's Dilema. Each agent
     [set inst-score total-cooperators * ( 1 - strength_of_dilemma)]                   ;; cooperator gets score of # of neighbors who cooperated
     [set inst-score total-cooperators + (count (turtles-on neighborhood) - total-cooperators) * strength_of_dilemma ]  ;; non-cooperator get score of a multiple of the neighbors who cooperated
   set last-score score
+  ifelse count turtles-on neighborhood = 0[set inst-score 0][
+  set inst-score ((inst-score * 8 / count turtles-on neighborhood ) )]
+  
   set score inst-score * ( 1 - weighting-history) + last-score * weighting-history   
+  
   ;set score inst-score  
 end
 
@@ -409,7 +413,7 @@ to copy-strategy [temp-agent]
   [
     set rule [rule] of temp-agent]
   set likelihood-to-rewire [likelihood-to-rewire] of temp-agent 
-  set likelihood-to-rewire likelihood-to-rewire + random-normal 0 Transcription-error
+;  set likelihood-to-rewire likelihood-to-rewire + random-normal 0 Transcription-error
   if likelihood-to-rewire < 0 [set likelihood-to-rewire 0]
       
      
@@ -505,20 +509,33 @@ to rewire-pref
     set list-dists lput (count other turtles network:in-link-radius i links - reduce + list-dists) list-dists
     set i i + 1 
   ]
-  set list-dists map [? / (((position ? list-dists + 2) ^ 2) * num-eff)] list-dists 
+  let unconnected (count other turtles) - count link-neighbors - reduce + list-dists
+  let last-item last list-dists
+  set list-dists replace-item (length list-dists - 1) list-dists (unconnected + last-item)
+  set list-dists map [? / (((position ? list-dists + 2) ^ 10) * num-eff)] list-dists 
   let sum-probs reduce + list-dists
   ifelse sum-probs = 0 [][
   
 
   set list-dists map [? / sum-probs] list-dists
   let temp-init (random length list-dists)
+  let temp-agent one-of other turtles
   while [random-float 1 > item temp-init list-dists][set temp-init (random length list-dists) ]
-  let temp-agent one-of other turtles network:in-link-radius (temp-init + 2) links
+  ;show temp-init
+  ifelse temp-init = length list-dists - 1[
+    let not-eligible other turtles network:in-link-radius (temp-init + 1) links
+    let eligible other turtles with [not member? self not-eligible]
+    set temp-agent one-of eligible
+  ]
+  [
+  set temp-agent one-of other turtles network:in-link-radius (temp-init + 2) links
   while [network:link-distance temp-agent links != (temp-init + 2)][set temp-agent one-of other turtles network:in-link-radius (temp-init + 2) links]
-  
+  ]
+  ;show network:link-distance temp-agent links
   
   let potential-neighbors link-neighbors with [not member? self best-elements]
   let potential-edges my-links with [member? other-end potential-neighbors]
+  
   if any? potential-edges [
     ask one-of potential-edges [
             let node1 end1
@@ -617,7 +634,7 @@ to-report do-calculations
 
   ;; set up a variable so we can report if the network is disconnected
   let connected? network:mean-link-path-length turtles links
-  set average-path-length network:mean-link-path-length turtles with [count link-neighbors > 0] links
+  ;set average-path-length network:mean-link-path-length turtles with [count link-neighbors > 0] links
 
   ;; find the path lengths in the network
   ;find-path-lengths
@@ -790,10 +807,10 @@ to wire-them
               turtle ((n + 3) mod count turtles)
     make-edge turtle n
              turtle ((n + 4) mod count turtles)
-             make-edge turtle n
-             turtle ((n + 5) mod count turtles)
-             make-edge turtle n
-             turtle ((n + 6) mod count turtles)
+;             make-edge turtle n
+;             turtle ((n + 5) mod count turtles)
+;             make-edge turtle n
+;             turtle ((n + 6) mod count turtles)
     set n n + 1
   ]
 end
@@ -879,7 +896,7 @@ to do-plotting
      set-current-plot "Network Properties Rewire-All"
      set-current-plot-pen "apl"
      ;; note: dividing by value at initial value to normalize the plot
-     plotxy ticks
+     plotxy ticks 
             average-path-length / average-path-length-of-lattice
 
      set-current-plot-pen "cc"
@@ -941,7 +958,7 @@ num_nodes
 num_nodes
 10
 400
-400
+227
 1
 1
 NIL
@@ -956,7 +973,7 @@ rewiring_probability
 rewiring_probability
 0
 1
-0
+1
 0.01
 1
 NIL
@@ -1136,7 +1153,7 @@ Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
 1
-0.085
+0.502
 0.001
 1
 NIL
@@ -1219,7 +1236,7 @@ CHOOSER
 timescale
 timescale
 "years" "months"
-1
+0
 
 SWITCH
 278
@@ -1228,7 +1245,7 @@ SWITCH
 361
 replacement?
 replacement?
-1
+0
 1
 -1000
 
