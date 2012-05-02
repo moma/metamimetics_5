@@ -20,6 +20,7 @@ turtles-own
   changed-neighborhood?
   selective-factor
   cumulative-score
+  list-dists
 ]
 
 links-own
@@ -80,6 +81,10 @@ to setup
   ;; set up a variable to determine if we still have a connected network
   ;; (in most cases we will since it starts out fully connected)
   let success? false
+  let total count turtles
+  ask turtles [
+    set list-dists []
+    set list-dists lput total list-dists]
   while [not success?] [
     ;; we need to find initial values for lattice
     wire-them
@@ -97,6 +102,7 @@ to setup
   ask turtles [set neighborhood link-neighbors]
   ask turtles [
     set rule (random 4) + 1 
+    
     
     set changed-neighborhood? false
     set score 0.0
@@ -506,7 +512,7 @@ end
 to rewire-pref
 
   let i 2
-  let list-dists []
+  set list-dists []
   let num-eff count other turtles - count link-neighbors
 
   set list-dists lput (count other turtles network:in-link-radius 2 links - count link-neighbors) list-dists
@@ -573,7 +579,9 @@ to set-life-distribution-USA2007 ;;Life expectation for ages according data cole
     
     ask turtles [
       ifelse ticks = 0 [set cumulative-score score][ifelse age = 0 [set cumulative-score score][set cumulative-score (cumulative-score * (age - 1) + score) / age] ]
+      if cumulative-score = 0 [set cumulative-score 0.001]
       if ticks != 0 [set selective-factor cumulative-score / mean [cumulative-score] of turtles]
+      
       if count neighborhood = 0 [set selective-factor 1]
       set life-distribution map [? / selective-factor] life-distribution] 
     
@@ -592,8 +600,11 @@ to set-life-distribution-USA2007-months
     
     ask turtles [
       ifelse ticks = 0 [set cumulative-score score][ifelse age = 0 [set cumulative-score score][set cumulative-score (cumulative-score * (age - 1) + score) / age] ]
+      if cumulative-score = 0 [set cumulative-score 0.001]
       if ticks != 0 [set selective-factor cumulative-score / mean [cumulative-score] of turtles]
+      
       if count neighborhood = 0 [set selective-factor 1]
+      
       set life-distribution map [? / selective-factor] life-distribution] 
     
     ]
@@ -663,7 +674,7 @@ to-report do-calculations
 
   ;; set up a variable so we can report if the network is disconnected
   let connected? network:mean-link-path-length turtles links
-  set average-path-length network:mean-link-path-length turtles with [count link-neighbors > 0] links
+  set average-path-length network:mean-link-path-length turtles with [(reduce + list-dists) + count link-neighbors > 10] links
 
   ;; find the path lengths in the network
   ;find-path-lengths
@@ -987,7 +998,7 @@ num_nodes
 num_nodes
 10
 400
-158
+400
 1
 1
 NIL
@@ -1002,7 +1013,7 @@ rewiring_probability
 rewiring_probability
 0
 1
-0
+1
 0.01
 1
 NIL
@@ -1182,7 +1193,7 @@ Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
 1
-0.045
+0.502
 0.001
 1
 NIL
@@ -1265,7 +1276,7 @@ CHOOSER
 timescale
 timescale
 "years" "months"
-1
+0
 
 SWITCH
 278
