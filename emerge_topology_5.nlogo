@@ -21,6 +21,8 @@ turtles-own
   selective-factor
   cumulative-score
   list-dists
+  cultural-strategy
+  genetic-strategy
 ]
 
 links-own
@@ -54,7 +56,8 @@ globals
   conf
   anti
   worked?
-
+  count-dead
+  sum-ages
 ]
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -77,7 +80,8 @@ to setup
   set infinity 99999  ;; just an arbitrary choice for a large number
   set-default-shape turtles "circle"
   make-turtles
-
+  set count-dead 0
+  set sum-ages 0
   ;; set up a variable to determine if we still have a connected network
   ;; (in most cases we will since it starts out fully connected)
   let success? false
@@ -101,8 +105,9 @@ to setup
   set average-path-length network:mean-link-path-length turtles links
   ask turtles [set neighborhood link-neighbors]
   ask turtles [
-    set rule (random 4) + 1 
-    
+    ;set rule (random 4) + 1 
+    set genetic-strategy []
+    set genetic-strategy lput ((random 4) + 1) genetic-strategy
     
     set changed-neighborhood? false
     set score 0.0
@@ -114,24 +119,36 @@ to setup
     set cumulative-score 0
       set shape "face happy"
       ifelse random-float 1.0 < (inicoop / 100)
-        [set cooperate? true]
-        [set cooperate? false]
+        [;set cooperate? true
+          set genetic-strategy lput true genetic-strategy
+          ]
+        [;set cooperate? false
+          set genetic-strategy lput false genetic-strategy
+          ]
   ]
   ifelse random-init [
     ask turtles[
 ;;      set theta_1 random-float 1.0
  ;     set theta_2 random-float 1.0
-      set weighting-history random-float 1
-      set likelihood-to-rewire random-float 0.05
+ ;     set weighting-history random-float 1
+      set genetic-strategy lput random-float 1 genetic-strategy
+  ;    set likelihood-to-rewire random-float 0.05
+      set genetic-strategy lput random-float 0.5 genetic-strategy
     ]
         ]  
       [ask turtles[
   ;    set theta_1 Initial-prob-update-behavior
    ;   set theta_2 Initial-prob-update-rule
-      set weighting-history initial-weighting-history
-      set likelihood-to-rewire Initial-likelihood-to-rewire]
+   ;   set weighting-history initial-weighting-history
+   set genetic-strategy lput initial-weighting-history genetic-strategy
+   ;   set likelihood-to-rewire Initial-likelihood-to-rewire
+   set genetic-strategy lput Initial-likelihood-to-rewire genetic-strategy]
+      
+   
       ]
-  ask turtles [establish-color]
+  ask turtles [
+    set cultural-strategy genetic-strategy
+    establish-color]
   init-age-USA2007
   ifelse timescale = "months" [set-life-distribution-USA2007-months][set-life-distribution-USA2007] 
   ;ask turtles [interact]
@@ -177,23 +194,23 @@ end
 
 
 to establish-color  ;; agent procedure
-  if rule = 1 
+  if item 0 cultural-strategy = 1 
     [set color 13 + score / 2
       if color > 19.9 [set color 19.9]
       ]
-  if rule = 2
+  if item 0 cultural-strategy = 2
     [set color 53 + score / 2
        if color > 59.9 [set color 59.9]
       ]
-  if rule = 3
+  if item 0 cultural-strategy = 3
     [set color 93 + score / 2
        if color > 99.9 [set color 99.9]
       ]
-  if rule = 4  
+  if item 0 cultural-strategy = 4  
     [set color 3 + score / 2
        if color > 9.9 [set color 9.9]
       ]
-  ifelse cooperate?
+  ifelse item 1 cultural-strategy
     [set size 1.2]
     [set size 0.8]
 end
@@ -212,7 +229,7 @@ to update-views
 to decision-stage
  
    ask turtles [ 
-      ifelse random-float 1 < likelihood-to-rewire 
+      ifelse random-float 1 < item 3 cultural-strategy 
    [if not am-i-the-best? and ((age > 12 and ticks > 10) or not Maturing-period ) [set rewire? true]]
    [
      ifelse not am-i-the-best? and not is-my-rule-the-best? and ((age > 12 and ticks > 10) or not Maturing-period ) [set rule? true]
@@ -234,9 +251,10 @@ to learning-stage
 end
 
 
-;;;;;;;;;;;;;;;;;;;;;;;
-;;; Main Procedure ;;;
-;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+
 
 
 to rewire-all
@@ -300,18 +318,18 @@ end
 
 to interact  ;; calculates the agent's payoff for Prisioner's Dilema. Each agents plays only with its neighbors
   set neighborhood link-neighbors       
-  let total-cooperators count (turtles-on neighborhood) with [cooperate?]
+  let total-cooperators count (turtles-on neighborhood) with [item 1 cultural-strategy]
   set inst-score 0
-  ifelse cooperate?
+  ifelse item 1 cultural-strategy
   ;[set inst-score total-cooperators + 1]
   ;[set inst-score total-cooperators * strength_of_dilemma]
     [set inst-score total-cooperators * ( 1 - strength_of_dilemma)]                   ;; cooperator gets score of # of neighbors who cooperated
     [set inst-score total-cooperators + (count (turtles-on neighborhood) - total-cooperators) * strength_of_dilemma ]  ;; non-cooperator get score of a multiple of the neighbors who cooperated
   set last-score score
-  ifelse count turtles-on neighborhood = 0[set inst-score 0][
+  ifelse count turtles-on neighborhood = 0 [set inst-score 0][
   set inst-score ((inst-score * 8 / count turtles-on neighborhood ) )]
   
-  set score inst-score * ( 1 - weighting-history) + last-score * weighting-history   
+  set score inst-score * ( 1 - item 2 cultural-strategy) + last-score * item 2 cultural-strategy   
   
   ;set score inst-score  
 end
@@ -320,10 +338,10 @@ to-report am-i-the-best? ;; reports true if the agents is the best in its neighb
   let test false
   ;; In the model, an isolated agent can not consider himself as the best
   if any? turtles-on neighborhood [
-  if (rule = 1) and (score >= [score] of max-one-of turtles-on neighborhood [score] * 0.99) [set test true]
-  if (rule = 2) and (score <= [score] of min-one-of turtles-on neighborhood [score] * 1.01) [set test true]
-  if (rule = 3) and (member? rule majority-rules) [set test true]
-  if (rule = 4) and (member? rule minority-rules) and not all? (turtles-on neighborhood) [rule = 4] [set test true]  
+  if (item 0 cultural-strategy = 1) and (score >= [score] of max-one-of turtles-on neighborhood [score] * 0.99) [set test true]
+  if (item 0 cultural-strategy = 2) and (score <= [score] of min-one-of turtles-on neighborhood [score] * 1.01) [set test true]
+  if (item 0 cultural-strategy = 3) and (member? item 0 cultural-strategy majority-rules) [set test true]
+  if (item 0 cultural-strategy = 4) and (member? item 0 cultural-strategy minority-rules) and not all? (turtles-on neighborhood) [item 0 cultural-strategy = 4] [set test true]  
   ]
   report test
 end
@@ -332,7 +350,7 @@ end
 to-report is-my-rule-the-best? ;; reports true if the agent's rule is used by any of the best valuated agents in its neighborhood (according with its rule) and false otherwise
   let test false
   ifelse am-i-the-best? [set test true][
-  if member? rule [rule] of best-elements [set test true] 
+  if member? item 0 cultural-strategy [item 0 cultural-strategy] of best-elements [set test true] 
   ]
   report test
 end
@@ -354,23 +372,23 @@ end
 to select-behavior  ;; patch procedure
   if any? turtles-on neighborhood
   [
-  if (rule = 1) or (rule = 2) 
-  [set cooperate? [cooperate?] of one-of best-elements]
+  if (item 0 cultural-strategy = 1) or (item 0 cultural-strategy = 2) 
+  [set cultural-strategy replace-item 1 cultural-strategy [item 1 cultural-strategy] of one-of best-elements]
                                                                 ;;choose behavior (cooperate, not cooperate)
                                                                 ;; of neighbor who performed best according
                                                                 ;; the agent's rule 
   
-  if rule = 3
-  [set cooperate? majority-behavior]                                                              
-  if rule = 4 
-  [set cooperate? not majority-behavior]
+  if item 0 cultural-strategy = 3
+  [set cultural-strategy replace-item 1 cultural-strategy majority-behavior]                                                              
+  if item 0 cultural-strategy = 4 
+  [set cultural-strategy replace-item 1 cultural-strategy not majority-behavior]
   ]   
 end
 
 
 to-report majority-rules  ;; reports a set with the number of the most frequent rules in agent's neighborhood (agent included)
                           ;; be careful when use in an ask cycle as the command is applied to "self"
-  let mylist [rule] of (turtle-set turtles-on neighborhood self)
+  let mylist [item 0 cultural-strategy] of (turtle-set turtles-on neighborhood self)
   set mylist modes mylist
   report mylist
 end
@@ -378,7 +396,7 @@ end
 
 to-report minority-rules ;; reports a set with the number of the less frequent rules in agent's neighborhood (agent included)
                          ;; be careful when use in an ask cycle as the command is applied to "self"
-  let mylist_1 [rule] of (turtle-set turtles-on neighborhood self)
+  let mylist_1 [item 0 cultural-strategy] of (turtle-set turtles-on neighborhood self)
   let mylist []
   let j 1
   while [empty? mylist] [
@@ -396,17 +414,17 @@ end
 to-report best-elements ;; report a list with the agents with the best performance according agents
   
   let myset (turtle-set turtles-on neighborhood self)
-  if rule = 1 [set myset myset with [score >= [score] of max-one-of myset [score] * 0.99]]
+  if item 0 cultural-strategy = 1 [set myset myset with [score >= [score] of max-one-of myset [score] * 0.99]]
   
-  if rule = 2 [set myset myset with [score <= [score] of min-one-of myset [score] * 1.1]]
-  if rule = 3 [
+  if item 0 cultural-strategy = 2 [set myset myset with [score <= [score] of min-one-of myset [score] * 1.1]]
+  if item 0 cultural-strategy = 3 [
     let rules-list majority-rules
-    set myset myset with [member? rule rules-list]
+    set myset myset with [member? item 0 cultural-strategy rules-list]
     ] 
-  if rule = 4 [
+  if item 0 cultural-strategy = 4 [
     let rules-list minority-rules
     if not empty? rules-list [
-    set myset myset with [member? rule rules-list]
+    set myset myset with [member? item 0 cultural-strategy rules-list]
     ]  
   ]
   report myset
@@ -416,43 +434,44 @@ to copy-strategy [temp-agent]
   
   ifelse random-float 1 < Transcription-error[
     let new-rule (random 4) + 1
-    while [new-rule = [rule] of temp-agent]
+    while [new-rule = [item 0 cultural-strategy] of temp-agent]
     [
       set new-rule (random 4) + 1
     ]
-    set rule new-rule
+    set cultural-strategy replace-item 0 cultural-strategy new-rule
     ]
   [
-    set rule [rule] of temp-agent]
-  set likelihood-to-rewire [likelihood-to-rewire] of temp-agent 
+    set cultural-strategy replace-item 0 cultural-strategy [item 0 cultural-strategy] of temp-agent]
+  set cultural-strategy replace-item 3 cultural-strategy [item 3 cultural-strategy] of temp-agent 
+    set cultural-strategy replace-item 2 cultural-strategy [item 2 cultural-strategy] of temp-agent 
 ;  set likelihood-to-rewire likelihood-to-rewire + random-normal 0 Transcription-error
-  if likelihood-to-rewire < 0 [set likelihood-to-rewire 0]
+  if item 3 cultural-strategy < 0 [set cultural-strategy replace-item 3 cultural-strategy 0]
       
      
 end
 
 to-report majority-behavior
-  let mylist [cooperate?] of (turtle-set turtles-on neighborhood self)
+  let mylist [item 1 cultural-strategy] of (turtle-set turtles-on neighborhood self)
   report one-of modes mylist
 end
 
 
 
 to set-outputs
-    set cooperation-rate count turtles with [cooperate?] / count turtles
-    if count turtles with [rule = 1] != 0 [
+    set cooperation-rate count turtles with [item 1 cultural-strategy] / count turtles
+    if count turtles with [item 0 cultural-strategy = 1] != 0 [
     
-    set fraction-best-maxi count turtles with [shape = "face happy" and rule = 1]/ count turtles with [rule = 1]]
-    if count turtles with [rule = 2] != 0 [
-    set fraction-best-mini count turtles with [shape = "face happy" and rule = 2]/ count turtles with [rule = 2]]
-    if count turtles with [rule = 3] != 0 [
-    set fraction-best-conf count turtles with [shape = "face happy" and rule = 3]/ count turtles with [rule = 3]]
-    if count turtles with [rule = 4] != 0 [
-    set fraction-best-anti count turtles with [shape = "face happy" and rule = 4]/ count turtles with [rule = 4]]
-  set maxi count turtles with [rule = 1] / count turtles
-  set mini count turtles with [rule = 2] / count turtles
-  set conf count turtles with [rule = 3] / count turtles
-  set anti count turtles with [rule = 4] / count turtles
+    set fraction-best-maxi count turtles with [shape = "face happy" and item 0 cultural-strategy = 1]/ count turtles with [item 0 cultural-strategy = 1]]
+    if count turtles with [item 0 cultural-strategy = 2] != 0 [
+    set fraction-best-mini count turtles with [shape = "face happy" and item 0 cultural-strategy = 2]/ count turtles with [item 0 cultural-strategy = 2]]
+    if count turtles with [item 0 cultural-strategy = 3] != 0 [
+    set fraction-best-conf count turtles with [shape = "face happy" and item 0 cultural-strategy = 3]/ count turtles with [item 0 cultural-strategy = 3]]
+    if count turtles with [item 0 cultural-strategy = 4] != 0 [
+    set fraction-best-anti count turtles with [shape = "face happy" and item 0 cultural-strategy = 4]/ count turtles with [item 0 cultural-strategy = 4]]
+  set maxi count turtles with [item 0 cultural-strategy = 1] / count turtles
+  set mini count turtles with [item 0 cultural-strategy = 2] / count turtles
+  set conf count turtles with [item 0 cultural-strategy = 3] / count turtles
+  set anti count turtles with [item 0 cultural-strategy = 4] / count turtles
 end
 
 
@@ -634,19 +653,25 @@ to replacement
 end
 
 to replace  
-    ifelse random-float 1.0 < 0.5 [set cooperate? true][set cooperate? false]        
+    set sum-ages sum-ages + age
+    set count-dead count-dead + 1
+    ifelse random-float 1.0 < 0.5 [set cultural-strategy replace-item 1 cultural-strategy true][set cultural-strategy replace-item 1 cultural-strategy false]        
     set age 0
     set rule? false
     set behavior? false
     set rewire? false
-    if random-init
+    ifelse random-init
     [
     ;set theta_1 random-float 1.0
     ;set theta_2 random-float 1.0
-    set weighting-history random-float 1.0
-    set likelihood-to-rewire random-float 0.01
+    ;set weighting-history random-float 1.0
+    set cultural-strategy replace-item 2 cultural-strategy random-float 1.0
+    ;set likelihood-to-rewire random-float 0.01
+    set cultural-strategy replace-item 3 cultural-strategy random-float 0.5
     ]
-    set rule (random 4) + 1
+    [set cultural-strategy replace-item 2 cultural-strategy initial-weighting-history
+      set cultural-strategy replace-item 3 cultural-strategy Initial-likelihood-to-rewire
+    set cultural-strategy replace-item 0 cultural-strategy ((random 4) + 1)]
     ;move-to one-of patches with [not any? turtles-here]
 end
 
@@ -943,7 +968,19 @@ to do-plotting
      ;; note: dividing by initial value to normalize the plot
      plotxy ticks
             clustering-coefficient / clustering-coefficient-of-lattice
-   
+            
+     set-current-plot "age-distribution"
+     set-current-plot-pen "mean-age"
+     let temp-list []
+     set temp-list lput mean [age] of turtles temp-list
+     set temp-list lput mean [age] of turtles temp-list
+     histogram temp-list 
+     set-current-plot-pen "life-expectancy"
+     set temp-list []
+     if (count-dead > 0)[
+     set temp-list lput (sum-ages / count-dead) temp-list
+     set temp-list lput (sum-ages / count-dead) temp-list]
+     histogram temp-list 
 end
 
 
@@ -1142,10 +1179,10 @@ NIL
 1
 
 PLOT
-952
-19
-1321
-231
+950
+10
+1237
+175
 cooperation
 time
 NIL
@@ -1164,10 +1201,10 @@ PENS
 "fraction-best-anti" 1.0 0 -16777216 true "" ""
 
 PLOT
-951
-236
-1321
-442
+952
+174
+1237
+328
 population
 time
 fraction
@@ -1193,7 +1230,7 @@ Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
 1
-0.502
+0.005
 0.001
 1
 NIL
@@ -1298,7 +1335,7 @@ degree-of-pref
 degree-of-pref
 0
 10
-10
+2
 1
 1
 NIL
@@ -1314,6 +1351,26 @@ selective-pressure?
 0
 1
 -1000
+
+PLOT
+952
+328
+1237
+496
+age-distribution
+NIL
+NIL
+0.0
+100.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 1 -16777216 true "" "histogram [age] of turtles"
+"mean-age" 1.0 1 -2674135 true "" ""
+"life-expectancy" 1.0 1 -10899396 true "" ""
 
 @#$#@#$#@
 ## WHAT IS IT?
