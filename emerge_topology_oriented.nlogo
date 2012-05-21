@@ -103,7 +103,7 @@ to setup
   set highlight-string ""
   rewire-all
   set average-path-length network:mean-link-path-length turtles links
-  ask turtles [set neighborhood link-neighbors]
+  ask turtles [set neighborhood (turtle-set turtles-on in-link-neighbors turtles-on out-link-neighbors)]
   ask turtles [
     ;set rule (random 4) + 1 
     set genetic-strategy []
@@ -749,7 +749,7 @@ to-report do-calculations
 
   ;; set up a variable so we can report if the network is disconnected
   let connected? network:mean-link-path-length turtles links
-  set average-path-length network:mean-link-path-length turtles with [(reduce + list-dists) + count link-neighbors > 10] links
+  set average-path-length network:mean-link-path-length turtles with [(reduce + list-dists) + count out-link-neighbors + count in-link-neighbors > 10] links
 
   ;; find the path lengths in the network
   ;find-path-lengths
@@ -789,7 +789,7 @@ end
 
 
 to find-clustering-coefficient
-  ifelse all? turtles [count link-neighbors <= 1]
+  ifelse all? turtles [count out-link-neighbors <= 1]
   [
     ;; it is undefined
     ;; what should this be?
@@ -797,18 +797,18 @@ to find-clustering-coefficient
   ]
   [
     let total 0
-    ask turtles with [ count link-neighbors <= 1]
+    ask turtles with [ count out-link-neighbors <= 1]
       [ set node-clustering-coefficient "undefined" ]
-    ask turtles with [ count link-neighbors > 1]
+    ask turtles with [ count out-link-neighbors > 1]
     [
-      let hood link-neighbors
+      let hood (turtle-set turtles-on in-link-neighbors turtles-on out-link-neighbors)
       set node-clustering-coefficient (2 * count links with [ in-neighborhood? hood ] /
                                          ((count hood) * (count hood - 1)) )
       ;; find the sum for the value at turtles
       set total total + node-clustering-coefficient
     ]
     ;; take the average
-    set clustering-coefficient total / count turtles with [count link-neighbors > 1]
+    set clustering-coefficient total / count turtles with [count out-link-neighbors > 1]
   ]
 end
 
@@ -912,8 +912,8 @@ to wire-them
   let n 0
   while [n < count turtles]
   [
-    ;; make edges with the next three neighbors
-    ;; this makes a lattice with average degree of 6
+    ;; make edges with the next four neighbors
+    ;; this makes a lattice with average degree of 8
     make-edge turtle n
               turtle ((n + 1) mod count turtles)
     make-edge turtle n
@@ -932,7 +932,7 @@ end
 
 ;; connects the two turtles
 to make-edge [node1 node2]
-  ask node1 [ create-link-with node2  [
+  ask node1 [ create-link-to node2  [
     set rewired? false
   ] ]
 end
