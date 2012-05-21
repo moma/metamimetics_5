@@ -1,0 +1,466 @@
+<openmole>
+  <org.openmole.ide.core.implementation.serializer.SerializedProxys>
+    <task class="scala.collection.immutable.Set$Set4">
+      <elem1 class="org.openmole.ide.core.implementation.dataproxy.TaskDataProxyUI">
+        <dataUI class="org.openmole.ide.plugin.task.serialization.StoreIntoCSVTaskDataUI">
+          <inputParameters class="scala.collection.mutable.HashMap" serialization="custom">
+            <scala.collection.mutable.HashMap>
+              <default/>
+              <int>750</int>
+              <int>8</int>
+              <boolean>false</boolean>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>average-path-length</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <string></string>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>conf</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <string></string>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>fraction-best</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <string></string>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>clustering-coefficient</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <string></string>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>cooperation-rate</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <string></string>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>anti</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <string></string>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>mini</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <string></string>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>maxi</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <string></string>
+            </scala.collection.mutable.HashMap>
+          </inputParameters>
+          <prototypesIn class="scala.collection.immutable.$colon$colon" serialization="custom">
+            <unserializable-parents/>
+            <scala.collection.immutable._-colon_-colon>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[7]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[3]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[4]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[5]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[6]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[2]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[8]"/>
+              <scala.collection.immutable.ListSerializeEnd_-/>
+            </scala.collection.immutable._-colon_-colon>
+          </prototypesIn>
+          <prototypesOut class="scala.collection.immutable.Nil$"/>
+          <implicitPrototypesIn class="scala.collection.immutable.$colon$colon" serialization="custom">
+            <unserializable-parents/>
+            <scala.collection.immutable._-colon_-colon>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>1</dim>
+                  <name>Transcription-error</name>
+                </dataUI>
+                <generated>true</generated>
+                <id>19</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.IntegerPrototypeDataUI">
+                  <dim>1</dim>
+                  <name>seed</name>
+                </dataUI>
+                <generated>true</generated>
+                <id>22</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>1</dim>
+                  <name>Initial-likelihood-to-rewire</name>
+                </dataUI>
+                <generated>true</generated>
+                <id>18</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.IntegerPrototypeDataUI">
+                  <dim>1</dim>
+                  <name>num_nodes</name>
+                </dataUI>
+                <generated>true</generated>
+                <id>21</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                  <dim>1</dim>
+                  <name>strength</name>
+                </dataUI>
+                <generated>true</generated>
+                <id>23</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.IntegerPrototypeDataUI">
+                  <dim>1</dim>
+                  <name>inicoop</name>
+                </dataUI>
+                <generated>true</generated>
+                <id>20</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../prototypesIn/scala.collection.immutable._-colon_-colon/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable._-colon_-colon>
+          </implicitPrototypesIn>
+          <implicitPrototypesOut class="scala.collection.immutable.$colon$colon" serialization="custom">
+            <unserializable-parents/>
+            <scala.collection.immutable._-colon_-colon>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+                <dataUI class="org.openmole.ide.plugin.prototype.base.FilePrototypeDataUI">
+                  <dim>0</dim>
+                  <name>final_output</name>
+                </dataUI>
+                <generated>false</generated>
+                <id>0</id>
+              </org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../prototypesIn/scala.collection.immutable._-colon_-colon/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable._-colon_-colon>
+          </implicitPrototypesOut>
+          <name>mergeT</name>
+          <columns class="scala.collection.immutable.$colon$colon" serialization="custom">
+            <unserializable-parents/>
+            <scala.collection.immutable._-colon_-colon>
+              <scala.Tuple2>
+                <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI" reference="../../../../implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[4]"/>
+                <__2 class="string">num_nodes</__2>
+              </scala.Tuple2>
+              <scala.Tuple2>
+                <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI" reference="../../../../implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[3]"/>
+                <__2 class="string">output1</__2>
+              </scala.Tuple2>
+              <scala.Tuple2>
+                <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI" reference="../../../../implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[2]"/>
+                <__2 class="string">seed</__2>
+              </scala.Tuple2>
+              <scala.Tuple2>
+                <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI" reference="../../../../implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[6]"/>
+                <__2 class="string">inicoop</__2>
+              </scala.Tuple2>
+              <scala.Tuple2>
+                <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI" reference="../../../../implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[5]"/>
+                <__2 class="string">strength</__2>
+              </scala.Tuple2>
+              <scala.Tuple2>
+                <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI" reference="../../../../implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI"/>
+                <__2 class="string">Transcription-error</__2>
+              </scala.Tuple2>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../prototypesIn/scala.collection.immutable._-colon_-colon/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable._-colon_-colon>
+          </columns>
+          <protoFile class="scala.Some">
+            <x class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI" reference="../../implicitPrototypesOut/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI"/>
+          </protoFile>
+        </dataUI>
+        <id>30</id>
+      </elem1>
+      <elem2 class="org.openmole.ide.core.implementation.dataproxy.TaskDataProxyUI">
+        <dataUI class="org.openmole.ide.plugin.task.exploration.ExplorationTaskDataUI">
+          <inputParameters class="scala.collection.mutable.HashMap" serialization="custom">
+            <scala.collection.mutable.HashMap>
+              <default/>
+              <int>750</int>
+              <int>0</int>
+              <boolean>false</boolean>
+            </scala.collection.mutable.HashMap>
+          </inputParameters>
+          <prototypesIn class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <prototypesOut class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <implicitPrototypesIn class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <implicitPrototypesOut class="scala.collection.immutable.$colon$colon" serialization="custom">
+            <unserializable-parents/>
+            <scala.collection.immutable._-colon_-colon>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../../../elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../../../elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[2]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../../../elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[3]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../../../elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[4]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../../../elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[5]"/>
+              <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../../../elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[6]"/>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../elem1/dataUI/prototypesIn/scala.collection.immutable._-colon_-colon/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable._-colon_-colon>
+          </implicitPrototypesOut>
+          <name>explorationT</name>
+          <sampling class="scala.Some">
+            <x class="org.openmole.ide.core.implementation.dataproxy.SamplingDataProxyUI">
+              <dataUI class="org.openmole.ide.plugin.sampling.combine.CompleteSamplingDataUI">
+                <name>samplingT</name>
+                <factors class="scala.collection.immutable.$colon$colon" serialization="custom">
+                  <unserializable-parents/>
+                  <scala.collection.immutable._-colon_-colon>
+                    <scala.Tuple3>
+                      <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI">
+                        <dataUI class="org.openmole.ide.plugin.prototype.base.IntegerPrototypeDataUI">
+                          <dim>0</dim>
+                          <name>num_nodes</name>
+                        </dataUI>
+                        <generated>false</generated>
+                        <id>0</id>
+                      </__1>
+                      <__2 class="string">Range</__2>
+                      <__3 class="org.openmole.ide.plugin.domain.range.RangeDomainDataUI">
+                        <name></name>
+                        <min>100</min>
+                        <max>400</max>
+                        <step>50</step>
+                      </__3>
+                    </scala.Tuple3>
+                    <scala.Tuple3>
+                      <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI">
+                        <dataUI class="org.openmole.ide.plugin.prototype.base.IntegerPrototypeDataUI">
+                          <dim>0</dim>
+                          <name>inicoop</name>
+                        </dataUI>
+                        <generated>false</generated>
+                        <id>0</id>
+                      </__1>
+                      <__2 class="string">Range</__2>
+                      <__3 class="org.openmole.ide.plugin.domain.range.RangeDomainDataUI">
+                        <name></name>
+                        <min>0</min>
+                        <max>100</max>
+                        <step>10</step>
+                      </__3>
+                    </scala.Tuple3>
+                    <scala.Tuple3>
+                      <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI">
+                        <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                          <dim>0</dim>
+                          <name>Transcription-error</name>
+                        </dataUI>
+                        <generated>false</generated>
+                        <id>0</id>
+                      </__1>
+                      <__2 class="string">Range</__2>
+                      <__3 class="org.openmole.ide.plugin.domain.range.RangeDomainDataUI">
+                        <name></name>
+                        <min>0</min>
+                        <max>0.5</max>
+                        <step>0.05</step>
+                      </__3>
+                    </scala.Tuple3>
+                    <scala.Tuple3>
+                      <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI">
+                        <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                          <dim>0</dim>
+                          <name>strength</name>
+                        </dataUI>
+                        <generated>false</generated>
+                        <id>0</id>
+                      </__1>
+                      <__2 class="string">Range</__2>
+                      <__3 class="org.openmole.ide.plugin.domain.range.RangeDomainDataUI">
+                        <name></name>
+                        <min>0</min>
+                        <max>1</max>
+                        <step>0.1</step>
+                      </__3>
+                    </scala.Tuple3>
+                    <scala.Tuple3>
+                      <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI">
+                        <dataUI class="org.openmole.ide.plugin.prototype.base.DoublePrototypeDataUI">
+                          <dim>0</dim>
+                          <name>Initial-likelihood-to-rewire</name>
+                        </dataUI>
+                        <generated>false</generated>
+                        <id>0</id>
+                      </__1>
+                      <__2 class="string">Range</__2>
+                      <__3 class="org.openmole.ide.plugin.domain.range.RangeDomainDataUI">
+                        <name></name>
+                        <min>0</min>
+                        <max>0.8</max>
+                        <step>0.01</step>
+                      </__3>
+                    </scala.Tuple3>
+                    <scala.Tuple3>
+                      <__1 class="org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI">
+                        <dataUI class="org.openmole.ide.plugin.prototype.base.IntegerPrototypeDataUI">
+                          <dim>0</dim>
+                          <name>seed</name>
+                        </dataUI>
+                        <generated>false</generated>
+                        <id>0</id>
+                      </__1>
+                      <__2 class="string">Uniform distribution</__2>
+                      <__3 class="org.openmole.ide.plugin.domain.distribution.FiniteUniformIntDistributionDataUI">
+                        <name></name>
+                        <size>30</size>
+                      </__3>
+                    </scala.Tuple3>
+                    <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../elem1/dataUI/prototypesIn/scala.collection.immutable._-colon_-colon/scala.collection.immutable.ListSerializeEnd_-"/>
+                  </scala.collection.immutable._-colon_-colon>
+                </factors>
+              </dataUI>
+              <id>9</id>
+            </x>
+          </sampling>
+        </dataUI>
+        <id>17</id>
+      </elem2>
+      <elem3 class="org.openmole.ide.core.implementation.dataproxy.TaskDataProxyUI">
+        <dataUI class="org.openmole.ide.plugin.task.netlogo.NetLogo5TaskDataUI">
+          <inputParameters class="scala.collection.mutable.HashMap" serialization="custom">
+            <scala.collection.mutable.HashMap>
+              <default/>
+              <int>750</int>
+              <int>0</int>
+              <boolean>false</boolean>
+            </scala.collection.mutable.HashMap>
+          </inputParameters>
+          <prototypesIn class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <prototypesOut class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <implicitPrototypesIn class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <implicitPrototypesOut class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <name>nlogofile</name>
+          <workspaceEmbedded>false</workspaceEmbedded>
+          <nlogoPath>/home/erick/git/metamimetic_5/emerge_topology_5.nlogo</nlogoPath>
+          <lauchingCommands></lauchingCommands>
+          <prototypeMappingInput class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <prototypeMappingOutput class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <resources class="scala.collection.immutable.$colon$colon" serialization="custom">
+            <unserializable-parents/>
+            <scala.collection.immutable._-colon_-colon>
+              <string></string>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../elem1/dataUI/prototypesIn/scala.collection.immutable._-colon_-colon/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable._-colon_-colon>
+          </resources>
+          <globals class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+        </dataUI>
+        <id>0</id>
+      </elem3>
+      <elem4 class="org.openmole.ide.core.implementation.dataproxy.TaskDataProxyUI">
+        <dataUI class="org.openmole.ide.plugin.task.netlogo.NetLogo5TaskDataUI">
+          <inputParameters class="scala.collection.mutable.HashMap" serialization="custom">
+            <scala.collection.mutable.HashMap>
+              <default/>
+              <int>750</int>
+              <int>0</int>
+              <boolean>false</boolean>
+            </scala.collection.mutable.HashMap>
+          </inputParameters>
+          <prototypesIn class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <prototypesOut class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <implicitPrototypesIn class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <implicitPrototypesOut class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <name>nlogoT</name>
+          <workspaceEmbedded>false</workspaceEmbedded>
+          <nlogoPath>/home/erick/git/metamimetic_5/emerge_topology_5.nlogo</nlogoPath>
+          <lauchingCommands>random-seed ${seed}
+setup
+repeat 750 [go]</lauchingCommands>
+          <prototypeMappingInput class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <prototypeMappingOutput class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+          <resources class="scala.collection.immutable.$colon$colon" serialization="custom">
+            <unserializable-parents/>
+            <scala.collection.immutable._-colon_-colon>
+              <string></string>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../elem1/dataUI/prototypesIn/scala.collection.immutable._-colon_-colon/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable._-colon_-colon>
+          </resources>
+          <globals class="scala.collection.immutable.Nil$" reference="../../../elem1/dataUI/prototypesOut"/>
+        </dataUI>
+        <id>24</id>
+      </elem4>
+    </task>
+    <prototype class="scala.collection.immutable.HashSet$HashTrieSet" resolves-to="scala.collection.immutable.HashSet$SerializationProxy" serialization="custom">
+      <scala.collection.immutable.HashSet_-SerializationProxy>
+        <int>21</int>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem2/dataUI/sampling/x/dataUI/factors/scala.collection.immutable._-colon_-colon/scala.Tuple3[5]/__1"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[7]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem2/dataUI/sampling/x/dataUI/factors/scala.collection.immutable._-colon_-colon/scala.Tuple3[4]/__1"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[6]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[5]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[2]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem2/dataUI/sampling/x/dataUI/factors/scala.collection.immutable._-colon_-colon/scala.Tuple3[3]/__1"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[2]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[3]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[5]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[8]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[4]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[4]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[3]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem2/dataUI/sampling/x/dataUI/factors/scala.collection.immutable._-colon_-colon/scala.Tuple3[2]/__1"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem2/dataUI/sampling/x/dataUI/factors/scala.collection.immutable._-colon_-colon/scala.Tuple3/__1"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/implicitPrototypesIn/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI[6]"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem2/dataUI/sampling/x/dataUI/factors/scala.collection.immutable._-colon_-colon/scala.Tuple3[6]/__1"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/implicitPrototypesOut/scala.collection.immutable._-colon_-colon/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI"/>
+        <org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI reference="../../../task/elem1/dataUI/inputParameters/scala.collection.mutable.HashMap/org.openmole.ide.core.implementation.dataproxy.PrototypeDataProxyUI"/>
+      </scala.collection.immutable.HashSet_-SerializationProxy>
+    </prototype>
+    <sampling class="scala.collection.immutable.Set$Set1">
+      <elem1 class="org.openmole.ide.core.implementation.dataproxy.SamplingDataProxyUI" reference="../../task/elem2/dataUI/sampling/x"/>
+    </sampling>
+    <environment class="scala.collection.immutable.Set$EmptySet$"/>
+    <incr>32</incr>
+  </org.openmole.ide.core.implementation.serializer.SerializedProxys>
+  <org.openmole.ide.core.implementation.workflow.BuildMoleScene id="0" name="Mole_emerge_topology">
+    <dataUI/>
+    <capsule start="false" x="0.30600292825768666" y="0.2630208333333333">
+      <islot id="1"/>
+      <oslot id="2"/>
+      <task id="24"/>
+    </capsule>
+    <capsule start="true" x="0.15153733528550511" y="0.1171875">
+      <islot id="3"/>
+      <oslot id="4"/>
+      <task id="17"/>
+    </capsule>
+    <capsule start="false" x="0.5263543191800878" y="0.17708333333333334">
+      <islot id="5"/>
+      <oslot id="6"/>
+      <task id="30"/>
+    </capsule>
+    <transition source="4" target="1" type="EXPLORATION" condition=""/>
+    <transition source="2" target="5" type="BASIC" condition=""/>
+  </org.openmole.ide.core.implementation.workflow.BuildMoleScene>
+</openmole>
