@@ -28,6 +28,7 @@ turtles-own
 links-own
 [
     rewired?                  ;; keeps track of whether the link has been rewired or not
+    origin
 ]
 
 globals
@@ -294,7 +295,7 @@ to rewire-all
           ;; find a node distinct from node1 and not already a neighbor of node1
           let node2 one-of turtles with [ (self != node1) and (not link-neighbor? node1) ]
           ;; wire the new edge
-          ask node1 [ create-link-with node2 [ set color cyan  set rewired? true ] ]
+          ask node1 [ create-link-with node2 [ set color cyan  set rewired? true set origin [who] of node1] ]
 
           set number-rewired number-rewired + 1  ;; counter for number of rewirings
           set rewired? true
@@ -567,14 +568,23 @@ to rewire-pref
   ]
   ;show network:link-distance temp-agent links
   
-  let potential-neighbors link-neighbors with [not member? self best-elements]
-  let potential-edges my-links with [member? other-end potential-neighbors]
+  let potential-edges my-links with [origin = [who] of myself]
+  
+  let potential-neighbors link-neighbors with [member? link-with myself potential-edges]
+  ;show [who] of potential-neighbors
+  set potential-neighbors potential-neighbors with [not member? self best-elements]
+  ;show [who] of potential-neighbors
+  set potential-edges my-links with [member? other-end potential-neighbors]
+  ;show [origin] of potential-edges
+  ;let potential-neighbors link-neighbors with [not member? self best-elements]
+  ;let potential-edges my-links with [member? other-end potential-neighbors]
   
   if any? potential-edges [
     ask one-of potential-edges [
-            let node1 end1
+      let test origin
+            let node1 turtle origin
             let node2 temp-agent
-            ask node1 [create-link-with node2]
+            ask node1 [create-link-with node2 [set origin [who] of node1 if origin != test [show origin]]]
             ask node1 [set changed-neighborhood? true]
             die]
   ]]
@@ -922,6 +932,7 @@ to wire-them
               turtle ((n + 3) mod count turtles)
     make-edge turtle n
              turtle ((n + 4) mod count turtles)
+    
 ;             make-edge turtle n
 ;             turtle ((n + 5) mod count turtles)
 ;             make-edge turtle n
@@ -934,6 +945,7 @@ end
 to make-edge [node1 node2]
   ask node1 [ create-link-with node2  [
     set rewired? false
+    set origin [who] of node1
   ] ]
 end
 
@@ -1100,7 +1112,7 @@ rewiring_probability
 rewiring_probability
 0
 1
-0
+1
 0.01
 1
 NIL
@@ -1280,7 +1292,7 @@ Initial-likelihood-to-rewire
 Initial-likelihood-to-rewire
 0
 1
-0.01
+0.542
 0.001
 1
 NIL
@@ -1349,7 +1361,7 @@ initial-weighting-history
 initial-weighting-history
 0
 1
-0.01
+0.5
 0.01
 1
 NIL
@@ -1398,7 +1410,7 @@ SWITCH
 474
 selective-pressure?
 selective-pressure?
-0
+1
 1
 -1000
 
