@@ -16,7 +16,7 @@ turtles-own
   likelihood-to-rewire
   age
   weighting-history
-    life-distribution
+  life-distribution
   changed-neighborhood?
   selective-factor
   cumulative-score
@@ -172,13 +172,13 @@ to go
     ifelse am-i-the-best? [set shape "face happy"][set shape "face sad"]
     ]  
   
-  if selective-pressure?[set-cumulative-score]
+  if selective-pressure = "genetic-level" or selective-pressure = "death-probability" [set-cumulative-score]
     if replacement? [replacement]
   update-views
   change-layout
   set-outputs
   reset-decisions 
-
+show mean [cumulative-score] of turtles
   redo-plots
   tick
     
@@ -288,7 +288,8 @@ to rewire-all
       if (random-float 1) < rewiring_probability
       [
         ;; "a" remains the same
-        let node1 end1
+        let node1 turtle origin
+        ;let node1 end1
         ;; if "a" is not connected to everybody
         if [ count link-neighbors ] of end1 < (count turtles - 1)
         [
@@ -607,7 +608,12 @@ to set-life-distribution-USA2007 ;;Life expectation for ages according data cole
                                  
     set life-distribution (list 0.0067375 0.000464 0.0002865 0.0002165 0.000174 0.0001575 0.000147 0.000137 0.000124 0.000107 9.45e-05 9.8e-05 0.0001325 0.0002045 0.000305 0.000415 0.000521 0.000621 0.000709 0.000785 0.000863 0.0009375 0.000988 0.001006 0.001 0.000987 0.000978 0.000976 0.0009865 0.0010085 0.001035 0.0010655 0.001104 0.00115 0.001207 0.0012735 0.001354 0.0014505 0.001566 0.0017 0.00185 0.002016 0.0022 0.0024015 0.002621 0.0028585 0.0031155 0.003395 0.0036985 0.0040245 0.0043835 0.0047625 0.005141 0.005511 0.005887 0.006297 0.006758 0.00727 0.007839 0.008471 0.009184 0.0099695 0.0108055 0.011686 0.0126375 0.0137105 0.014928 0.016282 0.0177855 0.0194565 0.021371 0.0235095 0.0257935 0.028209 0.030833 0.0338595 0.037323 0.04111 0.0452255 0.049783 0.055009 0.0609785 0.0676135 0.074947 0.083097 0.092204 0.102388 0.113735 0.126297 0.140086 0.155102 0.171327 0.188734 0.20729 0.226949 0.246645 0.266066 0.284872 0.302715 0.319238 0.33667 0.355063 0.374468 0.394942 0.416545 0.43934 0.463392 0.488773 0.515555 0.543816 0.57364 0.605114 0.638328 0.67338 0.710373 0.749416 0.789422 0.828894 0.870338 0.913855)
   
-   
+   if selective-pressure = "death-probability" and cumulative-score < social-threshold [
+     if ticks != 0 [set selective-factor cumulative-score / mean [cumulative-score] of turtles]
+    if count neighborhood = 0 or selective-factor = 0 [set selective-factor 1]
+    set life-distribution map [? / selective-factor] life-distribution] 
+     
+     
   
   
 
@@ -619,6 +625,12 @@ to set-life-distribution-USA2007-months
 
     )
   
+  if selective-pressure = "death-probability" and cumulative-score < social-threshold [
+     if ticks != 0 [set selective-factor cumulative-score / mean [cumulative-score] of turtles]
+    if count neighborhood = 0 [set selective-factor 1]
+    set life-distribution map [? / selective-factor] life-distribution] 
+     
+     
     
 end
 
@@ -633,6 +645,13 @@ to set-life-distribution-USA2007-months-erick
       repeat 8 [set temp-dist lput month-factor temp-dist]
       ]
     set life-distribution temp-dist
+    
+    if selective-pressure = "death-probability" and cumulative-score < social-threshold [
+     if ticks != 0 [set selective-factor cumulative-score / mean [cumulative-score] of turtles]
+    if count neighborhood = 0 [set selective-factor 1]
+    set life-distribution map [? / selective-factor] life-distribution] 
+     
+     
     
     
   
@@ -670,7 +689,7 @@ to replace
     set behavior? false
     set rewire? false
     set cumulative-score 0
-    ifelse selective-pressure? [
+    if selective-pressure = "genetic-level" [
       let scores [cumulative-score] of link-neighbors
       
       let ids []
@@ -688,8 +707,11 @@ to replace
       
       ]
     
-    [
-    ifelse random-float 1.0 < 0.5 [set genetic-strategy replace-item 1 genetic-strategy true][set genetic-strategy replace-item 1 genetic-strategy false]        
+    
+    if selective-pressure = "none" [
+      ifelse random-float 1.0 < 0.5 [set genetic-strategy replace-item 1 genetic-strategy true]
+      [set genetic-strategy replace-item 1 genetic-strategy false]
+        set genetic-strategy replace-item 0 genetic-strategy ((random 4) + 1)]        
     
     ifelse random-init
     [
@@ -702,7 +724,7 @@ to replace
     ]
     [set genetic-strategy replace-item 2 genetic-strategy initial-weighting-history
       set genetic-strategy replace-item 3 genetic-strategy Initial-likelihood-to-rewire
-    set genetic-strategy replace-item 0 genetic-strategy ((random 4) + 1)]]
+    ]
     ;move-to one-of patches with [not any? turtles-here]
     set cultural-strategy genetic-strategy
     if timescale = "years" [set-life-distribution-USA2007]
@@ -1097,7 +1119,7 @@ num_nodes
 num_nodes
 10
 400
-147
+400
 1
 1
 NIL
@@ -1337,7 +1359,7 @@ SWITCH
 361
 Maturing-period
 Maturing-period
-1
+0
 1
 -1000
 
@@ -1348,7 +1370,7 @@ SWITCH
 361
 Random-init
 Random-init
-1
+0
 1
 -1000
 
@@ -1375,7 +1397,7 @@ CHOOSER
 timescale
 timescale
 "years" "months" "months-erick"
-2
+0
 
 SWITCH
 278
@@ -1397,22 +1419,11 @@ degree-of-pref
 degree-of-pref
 0
 10
-2
+10
 1
 1
 NIL
 HORIZONTAL
-
-SWITCH
-7
-441
-177
-474
-selective-pressure?
-selective-pressure?
-1
-1
--1000
 
 PLOT
 952
@@ -1433,6 +1444,31 @@ PENS
 "default" 1.0 1 -16777216 true "" "histogram [age] of turtles"
 "mean-age" 1.0 1 -2674135 true "" ""
 "life-expectancy" 1.0 1 -10899396 true "" ""
+
+CHOOSER
+3
+436
+174
+481
+selective-pressure
+selective-pressure
+"death-probability" "genetic-level" "none"
+0
+
+SLIDER
+209
+449
+381
+482
+social-threshold
+social-threshold
+0
+8
+4.08
+0.01
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
