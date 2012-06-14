@@ -1466,7 +1466,7 @@ degree-of-pref
 degree-of-pref
 0
 10
-2
+10
 1
 1
 NIL
@@ -1525,31 +1525,12 @@ SLIDER
 power-of-selection
 power-of-selection
 0
-100
-0
 1
+0.1
+0.001
 1
 NIL
 HORIZONTAL
-
-PLOT
-875
-103
-1075
-253
-plot 1
-NIL
-NIL
-0.0
-1.0
-0.0
-50.0
-false
-false
-"set-histogram-num-bars 100" ""
-PENS
-"default" 1.0 1 -16777216 true "" "histogram [item age life-distribution] of turtles"
-"pen-1" 0.01 0 -2674135 true "" "histogram [(1 - (cumulative-score * 0.125))] of turtles"
 
 @#$#@#$#@
 ## WHAT IS IT?
