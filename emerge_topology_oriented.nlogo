@@ -1126,6 +1126,23 @@ to change-layout
 end
 
 
+to set-variables-openmole
+  set Transcription-error 0.05
+  set num_nodes 100
+  set inicoop 50
+  set strength_of_dilemma 0.50
+  set Maturing-period false
+  set Random-init false
+  set replacement? true
+  set Initial-likelihood-to-rewire 0.5
+  set initial-weighting-history 0.5
+  set timescale "years"
+  set degree-of-pref 10
+  set selective-pressure "death-probability"
+  set power-of-selection 0.1
+  set social-threshold 8
+  ;set rewiring_probability 0
+end
 
 ; Copyright 2005 Uri Wilensky. All rights reserved.
 ; The full copyright notice is in the Information tab.
@@ -1520,7 +1537,7 @@ HORIZONTAL
 SLIDER
 209
 485
-363
+384
 518
 power-of-selection
 power-of-selection
