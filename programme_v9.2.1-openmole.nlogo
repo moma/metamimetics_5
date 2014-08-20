@@ -41,45 +41,41 @@ mean-age-autre-anti
 progres
 n-progres
 tortues1auto
-
-
-
-
-theta_1 ;; prob de changer son comportement
-theta_2 ;; prob de changer sa règle
-weighting-history
-Transcription-error
-erreur-inference-regle
-strength-of-dilemma
-weighting-history-maxi
-weighting-history-mini
-weighting-history-conf
-weighting-history-anti ;; poids associé au score 
-likelihood-to-move ;; prob de bouger
-erreur-inference-comportement
 density
 inicoop
 ]
 
 ;; variables relatives aux tortues
 turtles-own [
-cooperate?       ;; patch will cooperate
-rule                   ;; patch will have one of four rules: 1=Maxi 2=mini 3=conformist 4=anticonformist  
-score                ;; score resulting from interaction of neighboring patches. It is dictated by the PD payoffs and the discount factor
-last-score ;; score à t-1
-inst-score ;; score à t
-count-majority-rule ; nbr de tortues voisines ayant la règle majoritaire à t
-count-minority-rule ; nbr de tortues voisines ayant la règle minoritaire à t 
-last-count-majority-rule ; nbr de tortues voisines ayant la règle majoritaire à t-1 
-last-count-minority-rule ; nbr de tortues voisines ayant la règle minoritaire à t-1
-satisfaction ;; score de satisfaction
-age   ;;
-auto
-rule?   ;; tortue à une règle qu’elle veut changer ou non
-behavior?  ;; tortue à un comportement qu’elle veut changerou non
-move?   ;; tortue est à un endroit d’ou elle veut bouger ou non
-interactions ; nombre interactions par pas de temps / années
-t ; variable utilise pour le nombre d'interactions / années
+    ;description of agent's strategies
+    cooperate?       ;; patch will cooperate
+    rule                   ;; patch will have one of four rules: 1=Maxi 2=mini 3=conformist 4=anticonformist      
+    likelihood-to-move ;; proba de chercher à bouger
+    theta_1 ;; prob de changer son comportement
+    theta_2 ;; prob de changer sa règle
+    auto ;; propensity to be auto-biographic
+    weighting-history ;; poids associé au score     
+    ;agent decision
+    rule?   ;; tortue à une règle qu’elle veut changer ou non
+    behavior?  ;; tortue à un comportement qu’elle veut changerou non
+    move?   ;; tortue est à un endroit d’ou elle veut bouger ou non
+    
+
+    ;agents state
+    score                ;; score resulting from interaction of neighboring patches. It is dictated by the PD payoffs and the discount factor
+    last-score ;; score à t-1
+    inst-score ;; score à t
+    satisfaction ;; score de satisfaction
+    age   ;;
+ 
+        
+    ;agent's environement
+    count-majority-rule ; nbr de tortues voisines ayant la règle majoritaire à t
+    count-minority-rule ; nbr de tortues voisines ayant la règle minoritaire à t 
+    last-count-majority-rule ; nbr de tortues voisines ayant la règle majoritaire à t-1 
+    last-count-minority-rule ; nbr de tortues voisines ayant la règle minoritaire à t-1
+       
+    t ; variable utilise pour le nombre d'interactions / années
  ]
 
 
@@ -88,38 +84,30 @@ to common-setup
      set pcolor 0    ;; d’avoir la couleur 0
       if random-float 1 < density [ sprout 1 ]  ;; s’il n’y a pas de tortue en créer une
               ]
-  ask turtles [
-    ifelse memory? 
-      [set rule (random 4) + 1 ;; donne une stratégie à chaque tortue
-            set shape "face happy" ;; chaque tortue est contente au départ
-         ifelse random-float 1.0 < (inicoop / 100)  ;; si la coopération initiale de la tortue est supérieure à un entier alors ont dit qu’il coopère sinon on dit qu’il ne coopère pas  
-            [set cooperate? true]
-            [set cooperate? false]
-          set score 0.0 ;; score de zéro au départ
-          set rule? false  
-          set behavior? false  
-          set move? false
-          ifelse random 1 < 0.5
-          [set auto true]
-          [set auto false]
-          set interactions 10 
-          set t 0  ; nombre d'interaction par pas de temps ou "annees"
-          ] 
-   [
-     set rule (random 4) + 1 ;; donne une stratégie à chaque tortue
-            set shape "face happy" ;; chaque tortue est contente au départ
-         ifelse random-float 1.0 < (inicoop / 100)  ;; si la coopération initiale de la tortue est supérieure à un entier alors ont dit qu’il coopère sinon on dit qu’il ne coopère pas  
-            [set cooperate? true]
-            [set cooperate? false]
-          set score 0.0 ;; score de zéro au départ
-          set rule? false  
-          set behavior? false  
-          set move? false
-          set auto false
-          set interactions 10 
-          set t 0  ; nombre d'interaction par pas de temps ou "annees"
+    ask turtles [
+      set rule (random 4) + 1 ;; donne une stratégie à chaque tortue       
+      ifelse random-float 1.0 < (inicoop / 100)  ;; si la coopération initiale de la tortue est supérieure à un entier alors ont dit qu’il coopère sinon on dit qu’il ne coopère pas  
+        [set cooperate? true]
+        [set cooperate? false]
+      set likelihood-to-move Initial-like-to-move
+      set theta_1 Initial-prob-update-behavior
+      set theta_2 Initial-prob-update-rule
+      set weighting-history Initial-weighting-history               
+      set auto auto_biographic_agents
+      ifelse auto         
+          [set shape "target"] ;; chaque tortue est contente au départ
+          [set shape "face happy"] 
+          
+      set rule? false  
+      set behavior? false  
+      set move? false
+      
+      
+      set score 0.0 ;; score de zéro au départ
+      set last-score 0.0
+      set t 0  ; nombre d'interaction par pas de temps ou "annees"
           ]
-]  
+    
   ask turtles[establish-color]
         
       init-age-FR2011 ;; utilise la fonction init-age pour déterminer l’age des tortues
@@ -132,25 +120,17 @@ end
 
 to setup
   clear-all  ;; monde vide
-    
-        set theta_1 Initial-prob-update-behavior
-        set theta_2 Initial-prob-update-rule
-        set weighting-history Initial-weighting-history
-        set weighting-history-maxi weighting-history
-        set weighting-history-mini weighting-history
-        set weighting-history-conf weighting-history
-        set weighting-history-anti weighting-history
-        set likelihood-to-move Initial-like-to-move 
-        set strength-of-dilemma sod
+        ;agent's variables  
+        
+        
+        ;environmental variables
+        set strength-of-dilemma strength-of-dilemma
         set density mydensity
         set inicoop i-coop
-        set Transcription-error t-erreur
-        set erreur-inference-regle erreur-inf-r
-        set erreur-inference-comportement erreur-inf-c
-       
-    
+        set Transcription-error Transcription-error
+        set erreur-inference-regle erreur-inference-regle
+        set erreur-inference-comportement erreur-inference-comportement
      common-setup 
-
 end 
 
 
@@ -171,70 +151,49 @@ to go
     decision-stage
     learning-stage 
     ask turtles [calculate-satisfaction]
-    if move = true [moving-stage]
+    moving-stage
     
     set-outputs            
     update-plot    
     reset-decisions 
-    replacement
+    if generations ;; we have overlapping generations of agents with distributions as FR census.
+       [replacement]
     update-views
     
     ask turtles [
-      ifelse memory?
-      [
-      ifelse am-i-the-best? or am-i-progressing?; or am-i-the-best-global?
-     [set shape "face happy"] ;; si am-i-the-best = true ou am-i-progressing = true ou si am-i-the-best-global = true la tortue a une tête contente
-     [set shape "face sad"] ;; si am-i-the-best = false la tortue a une tête pas contente
-                ]  
-      [
-      ifelse am-i-the-best?; or am-i-the-best-global?
-     [set shape "face happy"] ;; si am-i-the-best = true ou am-i-progressing = true ou si am-i-the-best-global = true la tortue a une tête contente
-     [set shape "face sad"] ;; si am-i-the-best = false la tortue a une tête pas contente
-                ] 
-       ] 
+      ifelse auto
+      [ifelse am-i-progressing?; or am-i-the-best-global?
+        [set shape "target"] ;; si am-i-the-best = true ou am-i-progressing = true ou si am-i-the-best-global = true la tortue a une tête contente
+        [set shape "circle"]] ;; si am-i-the-best = false la tortue a une tête pas contente]
+      [ifelse am-i-the-best? ; or am-i-the-best-global?
+        [set shape "face happy"] ;; si am-i-the-best = true ou am-i-progressing = true ou si am-i-the-best-global = true la tortue a une tête contente
+        [set shape "face sad"] ;; si am-i-the-best = false la tortue a une tête pas contente]
+      ]]  
   update-views
   tick
 end
+
+
+to-report weigh_scores [current_score history_score weight]
+      report current_score + weight * history_score
+end
+
 
 to interact  ;; calculates the agent's payoff for Prisioner's Dilema. Each agents plays only with its neighbors
   let total-cooperators count (turtles-on neighbors) with [cooperate?] ;; calcul nombre coopérateur dans les voisins de chaque tortue
   set inst-score 0 
   ifelse cooperate? 
-    [set inst-score total-cooperators * ( 1 - strength-of-dilemma)]   ;; cooperator gets score of a multiple of neighbors who cooperated 
+    [set inst-score total-cooperators * ( 1 - strength-of-dilemma) ]   ;; cooperator gets score of a multiple of neighbors who cooperated 
     [set inst-score total-cooperators + (count (turtles-on neighbors) - total-cooperators) * strength-of-dilemma ]  ;; non-cooperator get score of a multiple of the neighbors who haven’t cooperated
   set last-score score ;; on stocke le score de t-1 dans score 
-  ifelse memory?
-  [ 
-    if rule = 1 ;; si règle maxi
-      [
-          set score inst-score * ( 1 - weighting-history-maxi) + last-score * weighting-history-maxi ;; on calcule le score à t en fonction du score à t-1
-        ]
-    if rule = 2 ;; si règle mini
-      [
-         set score inst-score * ( 1 - weighting-history-mini) + last-score * weighting-history-mini ;; on calcule le score à t en fonction du score à t-1
-        ]
-    if rule = 3 ;; si règle conf
-      [
-           set score inst-score * ( 1 - weighting-history-conf) + last-score * weighting-history-conf   ;; on calcule le score à t en fonction du score à t-1
-        ]
-    if rule = 4 ;; si règle anticonf
-      [
-          set score inst-score * ( 1 - weighting-history-anti) + last-score * weighting-history-anti   ;; on calcule le score à t en fonction du score à t-1
-        ]
-   ]
-   [
-       set score inst-score * ( 1 - weighting-history) + last-score * weighting-history
-   ]
+  set score weigh_scores inst-score last-score weighting-history
 end
 
 
 to analyse-neighbors
-
   
   let mylist [rule] of (turtle-set turtles-on neighbors self)
-  set mylist modes mylist
-  
-  
+  set mylist modes mylist  
   set last-count-majority-rule count-majority-rule 
   set count-majority-rule length mylist
 
@@ -256,82 +215,61 @@ end
 
   
   
-
+;; A VERIFIER ;;;;;;;;;;;;;;;;;;
 to decision-stage
-   ifelse memory?
-   [ ask turtles [ 
-     ifelse random-float 1 < likelihood-to-move  
-       [if not am-i-the-best? or not am-i-progressing? 
-         [set move? true]]
-         ;; si inf à likelihood-to-move et que la tortue n’est pas la meilleure alors move = true
-       [ ifelse random-float 1 < theta_2  ;; sinon  
-         [if (not am-i-the-best? or not am-i-progressing?) and not is-my-rule-the-best? 
-           [set rule? true]] ;; si inf à theta_2//prob de changer règle et que la tortue n’est pas la meilleure et que sa règle non plus n’est pas la meilleure alors la règle peut changer
-         [if random-float 1 < theta_1 and (not am-i-the-best? or not am-i-progressing?) 
-         [set behavior? true]];; sinon si inf à theta_1//prob de changer le comportement et que la tortue n’est pas la meilleure alors le comportement peut changer
-       ]
-               ]
    ask turtles [
-     if move? and all? neighbors [any? turtles-here] ;; si on peut bouger et que tous les voisins sont des tortues 
-         [set move? false ;; il n’y a pas de raison de bouger
-           ifelse is-my-rule-the-best? or am-i-progressing? 
-      [set behavior? true] ;; si la règle est la meilleure alors on peut changer comportement
-      [set rule? true] ;; sinon on peut changer la règle
-           ]
-        ifelse not am-i-progressing? and (rule? or behavior?) and all? neighbors [not any? turtles-here] ;;  si on peut changer la règle ou le comportement et que parmi les voisins il y a des vides 
-         [set move? true ;; on peut bouger la tortue
-           set rule? false ;; il n’y a pas de raison de changer la règle
-           set behavior? false ] ;; il n’y a pas de raison de changer le comportement
-         [set rule? true ;; il n’y a pas de raison de changer la règle
-          set behavior? true ] ;; il n’y a pas de raison de changer le comportement
-        if age < 12  ;; vérifier comment se passe l’apprentissage
-        [set rule? false]
-        ] ]
- 
-  [   ask turtles [ 
-     ifelse random-float 1 < likelihood-to-move  
-       [if not am-i-the-best? [set move? true]]  ;; si inf à likelihood-to-move et que la tortue n’est pas la meilleure alors move = true
-      [ 
-           ifelse random-float 1 < theta_2  ;; sinon  
-         [if not am-i-the-best? and not is-my-rule-the-best? [set rule? true]] ;; si inf à theta_2//prob de changer règle et que la tortue n’est pas la meilleure et que sa règle non plus n’est pas la meilleure alors la règle peut changer
-         [if random-float 1 < theta_1 and not am-i-the-best? [set behavior? true]];; sinon si inf à theta_1//prob de changer le comportement et que la tortue n’est pas la meilleure alors le comportement peut changer
-       ]
-               ]
-   ask turtles [
-     if move? and all? neighbors [any? turtles-here] ;; si on peut bouger et que tous les voisins sont des tortues et qu’il n’y a pas de conflits
-         [set move? false ;; il n’y a pas de raison de bouger
-           ifelse is-my-rule-the-best? 
-      [set behavior? true] ;; si la règle est la meilleure alors on peut changer comportement
-      [set rule? true] ;; sinon on peut changer la règle
-           ]
-       if (rule? or behavior?) and all? neighbors [not any? turtles-here] ;;  si on peut changer la règle ou le comportement et que parmi les voisins il y a des vides 
-         [set move? true ;; on peut bouger la tortue
-           set rule? false ;; il n’y a pas de raison de changer la règle
-           set behavior? false ] ;; il n’y a pas de raison de changer le comportement
-        if age < 12  ;; vérifier comment se passe l’apprentissage
-    [set rule? false]
-         ]]
-  
+     let i_am_statisfied true
+         ifelse ( auto ) 
+            [set i_am_statisfied am-i-progressing?]
+            [set i_am_statisfied am-i-the-best?]
+     let change_behavior false ; if the agent updates its rule, it also updates its behavior
+     
+     if not i_am_statisfied
+     [ 
+     ifelse (random-float 1 < likelihood-to-move and not all? neighbors [any? turtles-here])
+     [set move? true]
+     [
+       set move? false       
+       if (auto and (age > 12))
+       [set auto false
+        set i_am_statisfied am-i-the-best? 
+        ]
+       
+       if not i_am_statisfied
+       [     
+       if (random-float 1 < theta_2)
+          [set rule? true
+           set change_behavior true]
+       if (change_behavior or (random-float 1 < theta_1 and (not i_am_statisfied)))
+            [set behavior? true]                   
+       
+     ]]]
+   ; may be this is not necessary with auto ) true  
+   if age < 12  ;; vérifier comment se passe l’apprentissage
+        [set rule? false]   
+   ]
 end
-
-
 
 to learning-stage
     ask turtles [ 
-       if rule?   ;; si on peut changer la règle
-        [
-            select-rule  
-            select-behavior
-      ]
+      if rule?   ;; si on peut changer la règle
+      [
+            select-rule              
+     ]
        if behavior? ;; si on peut changer le comportement
       [select-behavior]
-       ]
-    
+    ]    
 end
 
 
 
 to calculate-satisfaction
+  ifelse auto
+  [ifelse am-i-progressing?
+    [set satisfaction 1]
+    [set satisfaction 0]
+    ]
+  [
     if rule = 1 ;; si règle maxi
       [
           let top [score] of max-one-of (turtle-set turtles-on neighbors self) [score]
@@ -391,6 +329,7 @@ to calculate-satisfaction
          ; [set satisfaction 1]
          ; [set satisfaction (my-group - bottom) / (top - bottom)] 
         ]
+    ]
     if not any? (turtles-on neighbors) ;; s’il n’y a pas de tortues voisines
   [set satisfaction 0]
 end
@@ -398,7 +337,12 @@ end
 
 
 to moving-stage
-   ask turtles [if move? and (not am-i-the-best? or not am-i-progressing? or satisfaction < 0.5) [move-agent]] ;; si on peut bouger et qu’on est pas le meilleur alors on bouge
+   ask turtles [if move? 
+     [ifelse auto
+     [if  (not am-i-progressing?) [move-agent]]
+     [if (not am-i-the-best?) [move-agent]]
+     
+   ]];; si on peut bouger et qu’on est pas le meilleur alors on bouge ; or satisfaction < 0.5
 end
 
 
@@ -429,9 +373,32 @@ end
 
 
 
+to replace  
+    set rule (random 4) + 1 ;; donne une stratégie à chaque tortue       
+    ifelse random-float 1.0 < (inicoop / 100)  ;; si la coopération initiale de la tortue est supérieure à un entier alors ont dit qu’il coopère sinon on dit qu’il ne coopère pas  
+        [set cooperate? true]
+        [set cooperate? false]
+     set likelihood-to-move Initial-like-to-move
+     set theta_1 Initial-prob-update-behavior
+     set theta_2 Initial-prob-update-rule
+     set weighting-history Initial-weighting-history               
+     set score 0.0
+     set last-score 0.0
+     set auto auto_biographic_agents
+     ifelse auto         
+         [set shape "target"] ;; chaque tortue est contente au départ
+         [set shape "face happy"]           
+     set rule? false  
+     set behavior? false  
+     set move? false      
+     set age 0
+     set t 0   
+end
+
+
 to set-outputs
     set cooperation-rate count turtles with [cooperate?] / count turtles
-    set fraction-best count turtles with [shape = "face happy"]/ count turtles
+    set fraction-best count turtles with [shape = "face happy" or shape = "face target"]/ count turtles
     set satisfaction-rate mean [satisfaction] of turtles
     
    set maxi-auto count turtles with [rule = 1] with [auto = true] / count turtles
@@ -500,116 +467,10 @@ ifelse count turtles with [rule = 3] with [auto = false] = 0
 ifelse count turtles with [rule = 4] with [auto = false] = 0
     [set mean-age-auto-anti 0]
     [set mean-age-autre-anti sum [age] of turtles with [rule = 4] with [auto = false] / count turtles with [rule = 4] with [auto = false]]
-
-
-
-
-;ask turtles [
-;  set mean-age-auto-maxi [ 0 0 ]  
-;  set mean-age-auto-mini [ 0 0 ]  
-;  set mean-age-auto-conf [ 0 0 ]  
-;  set mean-age-auto-anti [ 0 0 ]  
-;  set mean-age-autre-maxi [ 0 0 ]
-;  set mean-age-autre-mini [ 0 0 ]
-;  set mean-age-autre-conf [ 0 0 ]
-;  set mean-age-autre-anti [ 0 0 ]
-; if (age) != 0 
-;  [
-;if rule = 1 and auto = true
-;   [ifelse age = 0 
-;     [set mean-age-auto-maxi fput 0.5 mean-age-auto-maxi]   
-;     [set mean-age-auto-maxi fput age mean-age-auto-maxi]]
-;if rule = 1 and auto = false
-;   [ifelse age = 0 
-;     [set mean-age-autre-maxi fput 0.5 mean-age-autre-maxi]   
-;     [set mean-age-autre-maxi fput age mean-age-autre-maxi]
-;if rule = 2 and auto = true
-;   [ifelse age = 0 
-;     [set mean-age-auto-mini fput 0.5 mean-age-auto-mini]   
-;     [set mean-age-auto-mini fput age mean-age-auto-mini]
-;if rule = 2 and auto = false
-;   [ifelse age = 0 
-;     [set mean-age-autre-mini fput 0.5 mean-age-autre-mini]   
-;     [set mean-age-autre-mini fput age mean-age-autre-mini]
-;   ]
-;if rule = 3 and auto = true
-;   [ifelse age = 0 
-;     [set mean-age-auto-conf fput 0.5 mean-age-auto-conf]   
-;     [set mean-age-auto-conf fput age mean-age-auto-conf]
-;   ]
-;if rule = 3 and auto = false
-;   [ifelse age = 0 
-;     [set mean-age-autre-conf fput 0.5 mean-age-autre-conf]   
-;     [set mean-age-autre-conf fput age mean-age-autre-conf]
-;   ]
-;if rule = 4 and auto = true
-;   [ifelse age = 0 
-;     [set  mean-age-auto-anti fput 0.5  mean-age-auto-anti]   
-;     [set  mean-age-auto-anti fput age  mean-age-auto-anti]
-;   ]
-;if rule = 4 and auto = false
-;   [ifelse age = 0 
-;     [set mean-age-autre-anti fput 0.5 mean-age-autre-anti]   
-;     [set  mean-age-autre-anti fput age  mean-age-autre-anti]
-;   ]
-;     ]
-;   ]
-;] 
-;  ]   
-;    
-   
-;  ask turtles [       
-;    
-;    ifelse sum [age] of turtles with [rule = 1] = 0
-;    [set mean-age-auto-maxi 0
-;     set mean-age-autre-maxi 0
-;      ] 
-;    [
-;    set mean-age-auto-maxi sum [age] of turtles with [rule = 1] with [auto = true] / sum [age] of turtles with [rule = 1]
-;    set mean-age-autre-maxi sum [age] of turtles with [rule = 1] with [auto = false] / sum [age] of turtles with [rule = 1]
-;    ] 
-;    
-;    ifelse sum [age] of turtles with [rule = 2] = 0
-;    [
-;      set mean-age-auto-mini 0
-;      set mean-age-autre-mini 0
-;      ]
-;      
-;    [
-;    set mean-age-auto-mini sum [age] of turtles with [rule = 2] with [auto = true] / sum [age] of turtles with [rule = 2]
-;    set mean-age-autre-mini sum [age] of turtles with [rule = 2] with [auto = false] / sum [age] of turtles with [rule = 2]
-;    ]
-;    
-;     ifelse sum [age] of turtles with [rule = 3] = 0
-;    [
-;    set mean-age-auto-conf 0
-;    set mean-age-autre-conf 0
-;    ]
-;    [
-;    set mean-age-auto-conf sum [age] of turtles with [rule = 3] with [auto = true] / sum [age] of turtles with [rule = 3]
-;    set mean-age-autre-conf sum [age] of turtles with [rule = 3] with [auto = false] / sum [age] of turtles with [rule = 3]
-;    ]
-;    
-;     ifelse sum [age] of turtles with [rule = 4] = 0
-;    [
-;      set mean-age-auto-anti 0
-;      set mean-age-autre-anti 0
-;      ]
-;    [
-;      set mean-age-auto-anti sum [age] of turtles with [rule = 4] with [auto = true] / sum [age] of turtles with [rule = 4]
-;      set mean-age-autre-anti sum [age] of turtles with [rule = 4] with [auto = false] / sum [age] of turtles with [rule = 4]
-;      ]
-;]    
-
-   ifelse memory?
-    [
-    set progres count turtles with [am-i-progressing?] / count turtles
-    set n-progres count turtles with [ not am-i-progressing?] / count turtles
-    ]
-    [
+    
     set progres count turtles with [auto] / count turtles
     set n-progres count turtles with [ not auto] / count turtles
-    ]
+
 end
 
 
@@ -641,15 +502,16 @@ to update-plot
  ; plot anti-auto
   
   
-  set-current-plot "track"
-  set-current-plot-pen "pen1"
-  plot count turtles with [rule?]
-  set-current-plot-pen "pen2"
-  plot count turtles with [move?]
+  set-current-plot "strategy details"
+  set-current-plot-pen "rule update"
+  plot count turtles with [rule?] / count turtles
+  set-current-plot-pen "% moving"
+  plot count turtles with [move?] / count turtles
   
   set-current-plot "ratiotheta1/theta2"
-  set-current-plot-pen "ratio-maxi"
   plot ratio-maxi
+  set-current-plot-pen "ratio-maxi"
+  plot ratio-maxi 
   set-current-plot-pen "ratio-mini"
   plot ratio-mini
   set-current-plot-pen "ratio-conf"
@@ -680,34 +542,7 @@ ask turtles [establish-color]
 end
 
 to establish-color  ;; couleur tortues en fiction de leur règle
-  ifelse memory?
-  [
-  if rule = 1 and am-i-progressing? = false
-    [set color red
-      ]
-  if rule = 1 and am-i-progressing? = true
-  [set color orange 
-      ]
-  if rule = 2 and am-i-progressing? = false
-    [set color green
-      ]
-  if rule = 2 and am-i-progressing? = true
-    [set color lime
-      ]
-  if rule = 3 and am-i-progressing? = false
-    [set color blue
-      ]
-  if rule = 3 and am-i-progressing? = true
-    [set color cyan
-      ]
-  if rule = 4 and am-i-progressing? = false
-    [set color white
-      ]
-   if rule = 4 and am-i-progressing? = true
-    [set color grey
-      ]
-    ]
-   [
+  
   if rule = 1 
     [set color red
       ]
@@ -724,42 +559,7 @@ to establish-color  ;; couleur tortues en fiction de leur règle
     [set color white
       ]
   
-    ]
-end
-
-
-to replace  
-   ifelse memory? 
-       [ifelse random-float 1.0 < 0.5 
-         [ifelse random-float 1.0 < 0.5
-           [set cooperate? true 
-           set auto true]           
-           [set cooperate? true
-           set auto false]
-         ]
-         [ifelse random-float 1.0 < 0.5
-           [set cooperate? false 
-           set auto true]           
-           [set cooperate? false
-           set auto false]]
-               
-           set age 0
-           set rule? false
-           set behavior? false
-           set move? false
-           set rule (random 4) + 1
-           set t 0
-        ]
-        [ifelse random-float 1.0 < 0.5 
-           [set cooperate? true]
-           [set cooperate? false]        
-        set age 0
-        set rule? false
-        set behavior? false
-        set move? false
-        set rule (random 4) + 1
-        set t 0
-       ]
+    
 end
 
 
@@ -794,8 +594,6 @@ to-report majority-rules  ;; reports a set with the number of the most frequent 
   set mylist modes mylist
   report mylist
 end
-
-
 
 
 to-report minority-rules ;; reports a set with the number of the less frequent rules in agent's neighborhood (agent included)
@@ -862,30 +660,21 @@ end
 
 to-report am-i-progressing?
   let test false
-  ifelse memory?
-  [
   if (rule = 1) and (score > last-score)
     [set test true
-      set auto true]
+     ; set auto true
+     ]
   if (rule = 2) and (score < last-score)
     [set test true
-      set auto true]
+     ; set auto true
+     ]
   if (rule = 3) and count-majority-rule > last-count-majority-rule
     [set test true
-      set auto true]
+     ; set auto true
+     ]
   if (rule = 4) and count-minority-rule < last-count-minority-rule
     [set test true
-      set auto true]
-    ]
-  [
-  if (rule = 1) and (score > last-score)
-    [set test true]
-  if (rule = 2) and (score < last-score)
-    [set test true]
-  if (rule = 3) and count-majority-rule > last-count-majority-rule
-    [set test true]
-  if (rule = 4) and count-minority-rule < last-count-minority-rule
-    [set test true]
+    ;  set auto true
     ]
   report test
 end
@@ -957,90 +746,36 @@ end
 
 
 
-to select-rule
-                 ;; the agent changes its rule if every more succesfull neighbor has a different rule (if them exist).
-                 ;; The agent never change his rule nor behavior if is in the set of agents with best performance (according its rule)
-     ifelse memory?
-     [
-       if not am-i-progressing? 
-       [ if not am-i-the-best? 
-         [
-           if not is-my-rule-the-best?   
-           [copy-strategy (one-of best-elements)]
-      ]
-     ] 
-    ]
-    [
-      if not am-i-the-best? 
-         [
-           if not is-my-rule-the-best?   
-           [copy-strategy (one-of best-elements)]
-         ] 
-    ]      
-     
-     
-   ;  if not am-i-progressing? 
-   ; [ ifelse am-i-the-best? 
-   ;  [
-   ;  if not am-i-the-best-global? 
-    ;     [copy-strategy (one-of best-elements-global)]
-    ;  ]
-    ; [
-    ; if not is-my-rule-the-best?   
-    ;     [copy-strategy (one-of best-elements)]
-     ; ]
-     ;] 
+to select-rule              
+   if not is-my-rule-the-best?   
+   [copy-strategy (one-of best-elements)]         
 end
+
 
 
 to copy-strategy [temp-agent]
   
-      ifelse  random-float 1.0 < erreur-inference-regle
+      ifelse  random-float 1.0 > erreur-inference-regle
          [
            set rule [rule] of temp-agent
+           set auto [auto] of temp-agent
           ]
-         [set rule random 4 + 1]
-     
-      set auto [auto] of temp-agent 
+         [set rule random 4 + 1
+          ifelse random 1 < 0.5
+          [set auto true]
+          [set auto false]
+         ] 
       
       set theta_1 [theta_1] of temp-agent 
       set theta_1 add-noise "theta_1" Transcription-error
             
       set theta_2 [theta_2] of temp-agent 
-      set theta_2 add-noise "theta_2" Transcription-error
-     
-      ifelse memory?
-     [ 
-     if rule = 1 ;; si règle maxi
-      [
-          set weighting-history-maxi [weighting-history-maxi] of temp-agent
-          set weighting-history-maxi add-noise "weighting-history-maxi" Transcription-error 
-        ]
-    if rule = 2 ;; si règle mini
-      [
-         set weighting-history-mini [weighting-history-mini] of temp-agent
-         set weighting-history-mini add-noise "weighting-history-mini" Transcription-error 
-        ]
-    if rule = 3 ;; si règle conf
-      [
-           set weighting-history-conf [weighting-history-conf] of temp-agent
-           set weighting-history-conf add-noise "weighting-history-conf" Transcription-error 
-        ]
-    if rule = 4 ;; si règle anticonf
-      [
-          set weighting-history-anti [weighting-history-anti] of temp-agent
-          set weighting-history-anti add-noise "weighting-history-anti" Transcription-error 
-        ]
-     ] 
-     [
-       set weighting-history [weighting-history] of temp-agent
-       set weighting-history add-noise "weighting-history" Transcription-error 
-     ] 
-      
+      set theta_2 add-noise "theta_2" Transcription-error           
+      set weighting-history [weighting-history] of temp-agent
+     ;set weighting-history add-noise "weighting-history" Transcription-error             
       set likelihood-to-move [likelihood-to-move] of temp-agent 
-      set likelihood-to-move add-noise "likelihood-to-move" Transcription-error
-      
-     
+      set likelihood-to-move add-noise "likelihood-to-move" Transcription-error    
+       
 end
 
 
@@ -1116,10 +851,10 @@ to interchange-agents [my-target]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-252
-10
-674
-478
+243
+8
+665
+476
 16
 17
 12.5
@@ -1154,60 +889,60 @@ random-init
 -1000
 
 SLIDER
-6
-274
-235
-307
-Initial-prob-update-behavior
-Initial-prob-update-behavior
-0
-1
-0.5
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-6
-311
-237
-344
-Initial-prob-update-rule
-Initial-prob-update-rule
-0
-1
-0.5
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-6
-348
-238
-381
-Initial-weighting-history
-Initial-weighting-history
-0
-1
-0.8
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-6
-234
+7
+290
 236
-267
+323
+Initial-prob-update-behavior
+Initial-prob-update-behavior
+0
+1
+1
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+7
+328
+238
+361
+Initial-prob-update-rule
+Initial-prob-update-rule
+0
+1
+0.9
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+7
+365
+239
+398
+Initial-weighting-history
+Initial-weighting-history
+0
+1
+0
+0.02
+1
+NIL
+HORIZONTAL
+
+SLIDER
+7
+250
+237
+283
 Initial-like-to-move
 Initial-like-to-move
 0
 1
-0.7
+0
 0.1
 1
 NIL
@@ -1249,9 +984,9 @@ NIL
 
 PLOT
 875
-12
-1162
-139
+11
+1157
+158
 cooperation
 NIL
 NIL
@@ -1297,7 +1032,7 @@ PLOT
 10
 874
 160
-track
+strategy details
 NIL
 NIL
 0.0
@@ -1308,19 +1043,34 @@ true
 true
 "" ""
 PENS
-"pen1" 1.0 0 -955883 true "" ""
-"pen2" 1.0 0 -5825686 true "" ""
+"rule update" 1.0 0 -955883 true "" ""
+"% moving" 1.0 0 -5825686 true "" ""
 
 SLIDER
-4
-384
-244
-417
-t-erreur
-t-erreur
+5
+415
+245
+448
+Transcription-error
+Transcription-error
 0
-0.05
-0.05
+1
+0
+0.01
+1
+NIL
+HORIZONTAL
+
+SLIDER
+9
+127
+215
+160
+strength-of-dilemma
+strength-of-dilemma
+0
+0.5
+0.24
 0.01
 1
 NIL
@@ -1328,39 +1078,24 @@ HORIZONTAL
 
 SLIDER
 8
-123
+164
 214
-156
-sod
-sod
-0
-0.5
-0.5
-0.01
-1
-NIL
-HORIZONTAL
-
-SLIDER
-7
-160
-213
-193
+197
 mydensity
 mydensity
 0
 1
-0.8
+1
 0.1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-8
-198
-214
-231
+9
+202
+215
+235
 i-coop
 i-coop
 0
@@ -1372,10 +1107,10 @@ NIL
 HORIZONTAL
 
 PLOT
-880
-194
-1170
-314
+877
+159
+1157
+301
 ratiotheta1/theta2
 NIL
 NIL
@@ -1393,10 +1128,10 @@ PENS
 "ratio-anti" 1.0 0 -955883 true "" ""
 
 PLOT
-873
-375
-1162
-495
+876
+304
+1156
+453
 satisfaction2
 NIL
 NIL
@@ -1412,17 +1147,6 @@ PENS
 "satisfaction_mini" 1.0 0 -7500403 true "" ""
 "satisfaction_conf" 1.0 0 -2674135 true "" ""
 "satisfaction_anti" 1.0 0 -955883 true "" ""
-
-SWITCH
-6
-45
-136
-78
-memory?
-memory?
-1
-1
--1000
 
 PLOT
 674
@@ -1444,30 +1168,30 @@ PENS
 "autres" 1.0 0 -7500403 true "" ""
 
 SLIDER
-4
-419
-224
-452
-erreur-inf-r
-erreur-inf-r
+5
+450
+225
+483
+erreur-inference-regle
+erreur-inference-regle
 0
-0.05
-0.05
+1
+0
 0.01
 1
 NIL
 HORIZONTAL
 
 SLIDER
-1
-453
-240
-486
-erreur-inf-c
-erreur-inf-c
+2
+484
+241
+517
+erreur-inference-comportement
+erreur-inference-comportement
 0
-0.05
-0.05
+1
+0
 0.01
 1
 NIL
@@ -1476,11 +1200,22 @@ HORIZONTAL
 SWITCH
 7
 84
-110
+217
 117
-move
-move
+auto_biographic_agents
+auto_biographic_agents
+1
+1
+-1000
+
+SWITCH
 0
+46
+144
+79
+generations
+generations
+1
 1
 -1000
 
@@ -1827,7 +1562,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.0.5
+NetLogo 5.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
