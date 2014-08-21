@@ -1,3 +1,6 @@
+;; TO DO
+;; voir avec les mini le problème de l'assymétrie
+;; faire la distinction entre gains subjectifs et objectifs
 ;; variables globales
 globals [
   
@@ -8,7 +11,7 @@ maxi
 mini
 conf
 anti
-maxi-auto 
+maxi-auto
 mini-auto 
 conf-auto
 anti-auto
@@ -158,6 +161,7 @@ to go
     reset-decisions 
     if generations ;; we have overlapping generations of agents with distributions as FR census.
        [replacement]
+    ask turtles [set age age + 1]   
     update-views
     
     ask turtles [
@@ -176,6 +180,7 @@ end
 
 to-report weigh_scores [current_score history_score weight]
       report current_score + weight * history_score
+      ;report (1 - weight) * current_score + weight * history_score
 end
 
 
@@ -365,9 +370,9 @@ to replacement
      ifelse ex1 > 0
         [set prob-death   (ex1 - ex2)/( ex1 ) ]
         [set prob-death 1]       
-     ifelse  random-float 1  < prob-death 
+     if  random-float 1  < prob-death 
   [replace]
-  [set age age + 1]
+  
   ]  
 end   
 
@@ -880,8 +885,8 @@ ticks
 SWITCH
 4
 7
-136
-40
+144
+41
 random-init
 random-init
 1
@@ -912,7 +917,7 @@ Initial-prob-update-rule
 Initial-prob-update-rule
 0
 1
-0.9
+1
 0.1
 1
 NIL
@@ -927,7 +932,7 @@ Initial-weighting-history
 Initial-weighting-history
 0
 1
-0
+0.14
 0.02
 1
 NIL
@@ -1070,7 +1075,7 @@ strength-of-dilemma
 strength-of-dilemma
 0
 0.5
-0.24
+0.38
 0.01
 1
 NIL
@@ -1198,13 +1203,13 @@ NIL
 HORIZONTAL
 
 SWITCH
-7
-84
-217
-117
-auto_biographic_agents
-auto_biographic_agents
 1
+82
+211
+115
+auto_biographic_agents
+auto_biographic_agents
+0
 1
 -1000
 
@@ -1215,7 +1220,7 @@ SWITCH
 79
 generations
 generations
-1
+0
 1
 -1000
 
