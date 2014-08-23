@@ -307,7 +307,7 @@ to calculate-satisfaction
           let bottom [score2] of min-one-of (turtle-set turtles-on neighbors self) [score2]
           ifelse (top - bottom) = 0
           [set satisfaction 1]
-          [set satisfaction (top - score) / (top - bottom)] ;;sinon calcul de la satisfaction par rapport au score
+          [set satisfaction (top - score2) / (top - bottom)] ;;sinon calcul de la satisfaction par rapport au score
           
           
          ; let top [-1 * score] of min-one-of (turtle-set turtles-on neighbors self) [score]
